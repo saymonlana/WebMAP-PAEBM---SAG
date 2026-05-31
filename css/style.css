@@ -861,6 +861,7 @@ body {
     }
     .leaflet-control-zoom {
         margin-top: 64px !important;
+        margin-left: 12px !important;
     }
 }
 
