@@ -526,7 +526,7 @@ body {
 
 /* Popup Header Styling */
 .popup-header {
-    background: linear-gradient(135deg, #0d5c3a, #0f2027) !important;
+    background: linear-gradient(135deg, #0d5c3a, #0f2027);
     color: white !important;
     padding: 16px;
     display: flex;
