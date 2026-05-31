@@ -220,7 +220,7 @@ function createQuestionnairePopup(attrs, residentRecords, animalRecords) {
     }
     function fmtDate(ts) {
         if (!ts) return '<span style="color:#94a3b8">N/A</span>';
-        return new Date(ts).toLocaleDateString('pt-BR');
+        return new Date(ts).toLocaleDateString('pt-BR') + ' ' + new Date(ts).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
     }
 
     // --- ABA ANIMAIS (agregados de registros duplicados) ---
@@ -1106,7 +1106,7 @@ function getExportData() {
         Object.keys(a).forEach(function(k) {
             var val = a[k] != null ? a[k] : '';
             if (val && dateFields.indexOf(k) >= 0 && typeof val === 'number' && val > 100000000000) {
-                val = new Date(val).toLocaleDateString('pt-BR');
+                val = new Date(val).toLocaleDateString('pt-BR') + ' ' + new Date(val).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
             }
             row[k] = val;
         });
