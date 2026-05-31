@@ -1,0 +1,92 @@
+╔══════════════════════════════════════════════════════════════╗
+║           GUIA: MiniMax M2.5 Free para OpenCode             ║
+╚══════════════════════════════════════════════════════════════╝
+
+O MiniMax M2.5 Free é um modelo de IA gratuito que pode ser 
+usado como auxiliar adicional ao OpenCode para desenvolvimento.
+
+═══════════════════════════════════════════════════════════════
+ PASSO 1: CRIAR CONTA NO OPENROUTER (GRATUITO)
+═══════════════════════════════════════════════════════════════
+
+1. Acesse: https://openrouter.ai
+2. Clique em "Sign In" ou "Get Started"
+3. Crie uma conta (pode usar Google/GitHub)
+4. Após login, vá em "API Keys" no menu lateral
+5. Clique em "Create API Key"
+6. Dê um nome (ex: "MiniMax-PAEBM")
+7. Clique em "Create" e COPIE a chave (sk-or-v1-...)
+
+⚠️ IMPORTANTE: Guarde esta chave! Ela só aparece uma vez.
+
+═══════════════════════════════════════════════════════════════
+ PASSO 2: INSTALAR OPENCODE (se ainda não tiver)
+═══════════════════════════════════════════════════════════════
+
+Abra o PowerShell e digite:
+
+  npm i -g opencode-ai
+
+Ou baixe direto: https://opencode.ai
+
+═══════════════════════════════════════════════════════════════
+ PASSO 3: CONFIGURAR MINIMAX M2.5 FREE
+═══════════════════════════════════════════════════════════════
+
+Execute o arquivo: INSTALL_MINIMAX_M25.bat
+
+Ou configure manualmente:
+
+1. Abra o PowerShell
+2. Digite: opencode
+3. Digite: /connect
+4. Selecione: OpenRouter
+5. Cole sua API Key
+6. Digite: /models
+7. Selecione: MiniMax M2.5 Free
+
+═══════════════════════════════════════════════════════════════
+ PASSO 4: USAR O MINIMAX M2.5
+═══════════════════════════════════════════════════════════════
+
+Para alternar entre modelos no OpenCode:
+
+  /models              → Lista modelos disponíveis
+  /model minimax       → Seleciona MiniMax M2.5
+
+O MiniMax M2.5 será usado automaticamente quando selecionado.
+
+═══════════════════════════════════════════════════════════════
+ VANTAGENS DO MINIMAX M2.5 FREE
+═══════════════════════════════════════════════════════════════
+
+✓ Totalmente gratuito
+✓ 196.608 tokens de contexto
+✓ Ótimo para código e raciocínio
+✓ Respostas rápidas
+✓ Disponível 24/7
+
+═══════════════════════════════════════════════════════════════
+ LIMITAÇÕES
+═══════════════════════════════════════════════════════════════
+
+- Limite diário de requisições (soft limit)
+- Dados podem ser usados para treinamento (não use código sensível)
+- Período gratuito pode expirar (sem data definida)
+
+═══════════════════════════════════════════════════════════════
+ SOLUÇÃO DE PROBLEMAS
+═══════════════════════════════════════════════════════════════
+
+Erro: "API key invalid"
+→ Verifique se copiou a chave completa do OpenRouter
+
+Erro: "Model not found"
+→ Certifique-se de selecionar "minimax/minimax-m2.5:free"
+
+Sem resposta:
+→ O modelo pode estar sobrecarregado, tente novamente
+
+═══════════════════════════════════════════════════════════════
+
+DÚVIDAS? Consulte: https://opencode.ai/docs

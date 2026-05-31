@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebMap PAEBM - Santo Antônio do Grama - MG</title>
+    <link rel="icon" type="image/jpeg" href="Imagem2.jpg">
+    
+    <!-- Metas de SEO e Visualização -->
+    <meta name="description" content="Mapa interativo local (WebMap) para visualização e análise espacial dos questionários do PAEBM aplicados em Santo Antônio do Grama, Minas Gerais.">
+    <meta name="author" content="Antigravity AI">
+    
+    <!-- Leaflet CSS (Biblioteca de Mapas - Uso Local Offline) -->
+    <link rel="stylesheet" href="css/leaflet.css" />
+    
+    <!-- Leaflet MarkerCluster CSS (Agrupamento Dinâmico de Pontos - Uso Local Offline) -->
+    <link rel="stylesheet" href="css/MarkerCluster.css" />
+    <link rel="stylesheet" href="css/MarkerCluster.Default.css" />
+    
+    <!-- Biblioteca de Ícones Tabler Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    
+    <!-- Estilo Customizado Premium -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <!-- 1. Barra Lateral Flutuante (Painel de Controle Glassmorphic) -->
+    <aside class="sidebar">
+        <!-- Cabeçalho Principal -->
+        <header class="sidebar-header">
+            <div class="brand-section">
+                <img src="Imagem 1.jpg" alt="Agroflor" class="brand-logo-img">
+                <div>
+                    <h1 class="brand-title">WebMAP PAEBM - SAG</h1>
+                    <span class="brand-subtitle">Santo Antônio do Grama - MG</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Conteúdo Scrollável -->
+        <div class="sidebar-content">
+            
+            <!-- Seção de Estatísticas (Dashboard Cards) -->
+            <section>
+                <div class="stats-container">
+                    <div class="stat-card full-width">
+                        <div>
+                            <div class="stat-value" id="statTotalVal">0</div>
+                            <div class="stat-label">Total de Imóveis Mapeados</div>
+                        </div>
+                        <i class="ti ti-home-check" style="font-size: 28px; color: #a8d5ba; opacity: 0.9;"></i>
+                    </div>
+                    <div class="stat-card">
+                        <div>
+                            <div class="stat-value" id="statAplicadoVal">0</div>
+                            <div class="stat-label">Questionários Aplicados</div>
+                        </div>
+                        <i class="ti ti-checklist" style="font-size: 22px; color: #a8d5ba; opacity: 0.7; align-self: flex-end;"></i>
+                    </div>
+                    <div class="stat-card">
+                        <div>
+                            <div class="stat-value" id="statAusenteVal">0</div>
+                            <div class="stat-label">Proprietários Ausentes</div>
+                        </div>
+                        <i class="ti ti-user-off" style="font-size: 22px; color: #a8d5ba; opacity: 0.7; align-self: flex-end;"></i>
+                    </div>
+                    <div class="stat-card">
+                        <div>
+                            <div class="stat-value" id="statVoltarVal">0</div>
+                            <div class="stat-label">Ausentes - Ainda Voltar</div>
+                        </div>
+                        <i class="ti ti-rotate-clockwise" style="font-size: 22px; color: #a8d5ba; opacity: 0.7; align-self: flex-end;"></i>
+                    </div>
+                    <div class="stat-card">
+                        <div>
+                            <div class="stat-value" id="statRecusadoVal">0</div>
+                            <div class="stat-label">Recusados</div>
+                        </div>
+                        <i class="ti ti-ban" style="font-size: 22px; color: #a8d5ba; opacity: 0.7; align-self: flex-end;"></i>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Seção de Busca Instantânea -->
+            <section>
+                <h2 class="section-title">
+                    <i class="ti ti-search"></i> Busca Rápida
+                </h2>
+                <div class="search-wrapper">
+                    <i class="ti ti-search search-icon"></i>
+                    <input type="text" id="searchBox" class="search-input" placeholder="Buscar por Nome, Código ou Endereço...">
+                </div>
+            </section>
+
+            <!-- Seção de Filtros Avançados -->
+            <section>
+                <h2 class="section-title">
+                    <i class="ti ti-filter"></i> Filtros do Mapa
+                </h2>
+                
+                <div class="filter-group">
+                    <!-- Filtro por Área -->
+                    <div style="margin-bottom: 12px;">
+                        <label for="filterArea" style="font-size: 12px; font-weight: 600; color: #a8d5ba;">Zona Geográfica</label>
+                        <select id="filterArea" class="select-control">
+                            <option value="ALL">Todas as Zonas (Urbana & Rural)</option>
+                            <option value="URBANA">Área Urbana</option>
+                            <option value="RURAL">Zona Rural</option>
+                        </select>
+                    </div>
+
+                    <!-- Filtro por Barragem / Setor -->
+                    <div>
+                        <label for="filterBarragem" style="font-size: 12px; font-weight: 600; color: #a8d5ba;">Setor / Barragem</label>
+                        <select id="filterBarragem" class="select-control">
+                            <option value="ALL">Todos os Setores (Geral)</option>
+                            <option value="ZAS">Somente na ZAS</option>
+                            <option value="ZSS">Somente na ZSS</option>
+                        </select>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Seção de Status dos Questionários -->
+            <section>
+                <h2 class="section-title">
+                    <i class="ti ti-checkbox"></i> Status da Pesquisa
+                </h2>
+                <div class="status-pill-list" id="statusFilterList">
+                    <!-- Gerado dinamicamente via JS -->
+                </div>
+            </section>
+
+            <!-- Lista de Resultados Filtrados -->
+            <section style="flex: 2; min-height: 120px; display: flex; flex-direction: column; overflow: hidden;">
+                <h2 class="section-title" id="listTitle">
+                    <i class="ti ti-list"></i> <span id="listTitleText">Resultados (0)</span>
+                </h2>
+                <div id="filteredPointsList" style="flex: 1; min-height: 0; overflow-y: auto; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 4px; background: rgba(255,255,255,0.04);">
+                    <!-- Gerado dinamicamente via JS -->
+                </div>
+            </section>
+
+        </div>
+    </aside>
+
+    <!-- 2. Janela de Visualização do Mapa -->
+    <main id="map"></main>
+
+    <!-- 3. Modal Assistente de Carregamento Local (CORS Bypasser para file://) -->
+    <div class="loader-modal" id="loaderModal">
+        <div class="loader-card">
+            <div class="loader-icon">
+                <i class="ti ti-cloud-upload"></i>
+            </div>
+            <h2 class="loader-title">Assistente de Leitura Local</h2>
+            <p class="loader-desc">
+                Por questões de segurança, os navegadores modernos bloqueiam a leitura direta de arquivos locais ao abrir arquivos HTML por clique duplo (erro CORS no protocolo <i>file://</i>).
+                <br><br>
+                Por favor, <b>arraste e solte</b> os 3 arquivos JSON da pasta abaixo neste painel para carregar o mapa instantaneamente:
+            </p>
+            
+            <!-- Zona de Drop -->
+            <div class="dropzone" id="dropzone">
+                <i class="ti ti-file-text" style="font-size: 32px;"></i>
+                <span class="dropzone-text">Arraste os arquivos aqui ou Clique para Selecionar</span>
+                <span class="dropzone-subtext">Compatível com ZAS.json, ZSS.json e DADOS_COMPILADOS_PAEBM_SAG_JSON.json</span>
+                <input type="file" id="fileInput" multiple style="display: none;">
+            </div>
+
+            <!-- Status dos Arquivos Requeridos -->
+            <div class="file-status-list" id="fileStatusList">
+                <div class="file-status-item" data-file="DADOS_COMPILADOS_PAEBM_SAG_JSON.json">
+                    <div class="file-status-left">
+                        <div class="file-status-badge"></div>
+                        <span>DADOS_COMPILADOS_PAEBM_SAG_JSON.json</span>
+                    </div>
+                </div>
+                <div class="file-status-item" data-file="ZAS.json">
+                    <div class="file-status-left">
+                        <div class="file-status-badge"></div>
+                        <span>ZAS.json</span>
+                    </div>
+                </div>
+                <div class="file-status-item" data-file="ZSS.json">
+                    <div class="file-status-left">
+                        <div class="file-status-badge"></div>
+                        <span>ZSS.json</span>
+                    </div>
+                </div>
+            </div>
+            <!-- Botão de Fechar para visualizar mapa parcial -->
+            <button onclick="closeLoaderModal()" style="margin-top: 18px; width: 100%; background: #64748b; color: white; border: none; padding: 12px; border-radius: 12px; cursor: pointer; font-family: inherit; font-size: 13px; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 8px; transition: background 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.05);">
+                <i class="ti ti-eye"></i> Fechar e Visualizar Mapa
+            </button>
+        </div>
+    </div>
+
+    <!-- 4. Bibliotecas de Terceiros (Uso Local Offline) -->
+    
+    <!-- Proj4 JS (Projeção UTM -> WGS84 Local) -->
+    <script src="js/proj4.js"></script>
+    
+    <!-- Leaflet Map library Local -->
+    <script src="js/leaflet.js"></script>
+    
+    <!-- Leaflet MarkerCluster Local -->
+    <script src="js/leaflet.markercluster.js"></script>
+    
+    <!-- Dados JSON embutidos como JS (compatível com file:// e http://) -->
+    <script src="js/data_questionarios.js"></script>
+    <script src="js/data_zas.js"></script>
+    <script src="js/data_zss.js"></script>
+    
+    <script src="js/map.js"></script>
+    
+</body>
+</html>
