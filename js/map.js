@@ -89,7 +89,7 @@ function initMap() {
 
     L.control.layers(
         { "Google Earth": googleSat },
-        { "Questionarios": markerClusterGroup, "ZSS": zssLayer, "ZAS": zasLayer },
+        { "Questionários": markerClusterGroup, "ZSS": zssLayer, "ZAS": zasLayer },
         { position: 'topright', collapsed: false }
     ).addTo(map);
 
