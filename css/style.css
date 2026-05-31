@@ -923,6 +923,13 @@ body {
         width: 16px !important;
         height: 8px !important;
     }
+    .leaflet-control-zoom {
+        position: fixed !important;
+        bottom: 20px !important;
+        left: 20px !important;
+        top: auto !important;
+        right: auto !important;
+    }
     .leaflet-control-scale {
         bottom: 50px !important;
     }
