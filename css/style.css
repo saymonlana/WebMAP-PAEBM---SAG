@@ -868,11 +868,12 @@ body {
         margin-bottom: 1px !important;
     }
     .map-legend {
-        bottom: 16px !important;
+        bottom: 56px !important;
         right: 8px !important;
-        max-width: 150px !important;
-        padding: 5px 7px !important;
+        max-width: 155px !important;
+        padding: 6px 8px !important;
         border-radius: 8px !important;
+        overflow: visible !important;
     }
     .legend-title {
         font-size: 9px !important;
