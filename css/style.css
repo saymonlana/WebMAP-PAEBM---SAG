@@ -785,23 +785,106 @@ body {
     50% { transform: translateY(-8px); }
 }
 
+/* Botão Toggle Mobile */
+.mobile-toggle {
+    display: none;
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    z-index: 1100;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--bg-glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-glass);
+    color: #fff;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: var(--shadow-premium);
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+.mobile-toggle:active {
+    transform: scale(0.92);
+}
+
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 999;
+}
+
 /* Responsive sidebar styling */
 @media(max-width: 768px) {
     body {
-        flex-direction: column-reverse;
+        flex-direction: column;
+    }
+    .mobile-toggle {
+        display: flex;
     }
     .sidebar {
-        position: static;
-        width: 100%;
-        height: 60vh;
-        border-radius: 24px 24px 0 0;
-        margin: 0;
-        box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+        position: fixed;
+        top: 0;
+        left: -320px;
+        width: 300px;
+        height: 100vh;
+        border-radius: 0;
+        z-index: 1000;
+        transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         border: none;
-        border-top: 1px solid var(--border-light);
+        border-right: 1px solid var(--border-glass);
+    }
+    .sidebar.open {
+        left: 0;
+    }
+    .sidebar.open ~ .sidebar-overlay {
+        display: block;
     }
     #map {
-        height: 40vh;
+        width: 100%;
+        height: 100vh;
+    }
+    .map-legend {
+        bottom: 70px !important;
+        right: 8px !important;
+        font-size: 11px !important;
+        max-width: 160px !important;
+        padding: 6px 8px !important;
+    }
+    .leaflet-control-scale {
+        bottom: 50px !important;
+    }
+    .popup-wrapper {
+        max-width: 90vw !important;
+        min-width: 260px !important;
+    }
+    .popup-details-table {
+        font-size: 12px !important;
+    }
+    .popup-tab-btn {
+        font-size: 11px !important;
+        padding: 6px 8px !important;
+    }
+}
+
+@media(max-width: 400px) {
+    .sidebar {
+        width: 85vw;
+    }
+    .brand-logo-img {
+        width: 60px;
+        height: 38px;
+    }
+    .brand-title {
+        font-size: 14px;
     }
 }
 

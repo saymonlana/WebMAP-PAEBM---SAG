@@ -25,8 +25,16 @@
 </head>
 <body>
 
+    <!-- Botão Toggle Mobile -->
+    <button class="mobile-toggle" id="mobileToggle" onclick="toggleSidebar()">
+        <i class="ti ti-menu-2"></i>
+    </button>
+
+    <!-- Overlay para fechar sidebar no mobile -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
     <!-- 1. Barra Lateral Flutuante (Painel de Controle Glassmorphic) -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
         <!-- Cabeçalho Principal -->
         <header class="sidebar-header">
             <div class="brand-section">

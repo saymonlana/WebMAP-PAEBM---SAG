@@ -991,6 +991,16 @@ window.switchPopupTab = function(button, tabName) {
 };
 
 // =========================================================================
+// 14. MOBILE SIDEBAR TOGGLE
+// =========================================================================
+window.toggleSidebar = function() {
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('sidebarOverlay');
+    sidebar.classList.toggle('open');
+    overlay.classList.toggle('open');
+};
+
+// =========================================================================
 // 13. INICIALIZACAO
 // =========================================================================
 window.onload = function() {
