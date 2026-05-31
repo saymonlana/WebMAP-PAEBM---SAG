@@ -1097,6 +1097,12 @@ window.onload = function() {
     console.log('[PAEBM] Inicializando...');
     console.log('[PAEBM] ==========================================');
 
+    // Sidebar inicia fechada no desktop
+    if (window.innerWidth > 768) {
+        document.getElementById('sidebar').classList.add('collapsed');
+        document.getElementById('mobileToggle').style.left = '12px';
+    }
+
     initMap();
     tryAutoLoadData();
 };
