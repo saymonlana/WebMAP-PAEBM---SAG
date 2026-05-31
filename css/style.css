@@ -937,15 +937,52 @@ body {
         height: 26px !important;
     }
     .popup-wrapper {
-        max-width: 90vw !important;
-        min-width: 260px !important;
+        max-width: 92vw !important;
+        min-width: 0 !important;
+        width: 92vw !important;
     }
-    .popup-details-table {
-        font-size: 12px !important;
+    .leaflet-popup-content {
+        width: 92vw !important;
+        max-width: 92vw !important;
+        max-height: 65vh !important;
+        margin: 0 !important;
+    }
+    .leaflet-popup-content-wrapper {
+        border-radius: 14px !important;
+        max-width: 92vw !important;
+        overflow: hidden !important;
+    }
+    .leaflet-popup {
+        max-width: 92vw !important;
+    }
+    .popup-header {
+        padding: 10px 12px !important;
+    }
+    .popup-title {
+        font-size: 13px !important;
+    }
+    .popup-subtitle {
+        font-size: 11px !important;
     }
     .popup-tab-btn {
+        font-size: 10px !important;
+        padding: 5px 6px !important;
+    }
+    .popup-tab-content {
+        padding: 10px 10px !important;
+    }
+    .popup-details-table td {
+        padding: 6px 2px !important;
         font-size: 11px !important;
-        padding: 6px 8px !important;
+    }
+    .popup-details-table td.label-cell {
+        width: 38% !important;
+        padding-right: 6px !important;
+        font-size: 10px !important;
+    }
+    .popup-details-table td.value-cell {
+        font-size: 11px !important;
+        word-break: break-word !important;
     }
 }
 
@@ -970,6 +1007,22 @@ body {
     }
     .legend-item {
         font-size: 8px !important;
+    }
+    .popup-tab-btn {
+        font-size: 9px !important;
+        padding: 4px 4px !important;
+    }
+    .popup-details-table td {
+        font-size: 10px !important;
+    }
+    .popup-details-table td.label-cell {
+        font-size: 9px !important;
+    }
+    .popup-details-table td.value-cell {
+        font-size: 10px !important;
+    }
+    .popup-title {
+        font-size: 12px !important;
     }
 }
 
