@@ -829,6 +829,13 @@ function setupEventListeners() {
         selectedBarragem = e.target.value;
         applyFilters();
     });
+
+    // Fechar sidebar ao tocar no mapa (mobile)
+    document.getElementById('map').addEventListener('click', function() {
+        if (window.innerWidth <= 768) {
+            closeSidebar();
+        }
+    });
 }
 
 function initStatusFilterUI() {
@@ -1013,6 +1020,18 @@ window.toggleSidebar = function() {
         toggle.style.right = 'auto';
     }
 };
+
+function closeSidebar() {
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('sidebarOverlay');
+    var toggle = document.getElementById('mobileToggle');
+    if (sidebar && sidebar.classList.contains('open')) {
+        sidebar.classList.remove('open');
+        overlay.classList.remove('open');
+        toggle.style.left = '12px';
+        toggle.style.right = 'auto';
+    }
+}
 
 function isMobile() {
     return window.innerWidth <= 768;
