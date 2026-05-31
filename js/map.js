@@ -1002,8 +1002,16 @@ window.switchPopupTab = function(button, tabName) {
 window.toggleSidebar = function() {
     var sidebar = document.getElementById('sidebar');
     var overlay = document.getElementById('sidebarOverlay');
+    var toggle = document.getElementById('mobileToggle');
     sidebar.classList.toggle('open');
     overlay.classList.toggle('open');
+    if (sidebar.classList.contains('open')) {
+        toggle.style.left = 'auto';
+        toggle.style.right = '12px';
+    } else {
+        toggle.style.left = '12px';
+        toggle.style.right = 'auto';
+    }
 };
 
 function isMobile() {
