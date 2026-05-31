@@ -1098,24 +1098,15 @@ function getExportData() {
     questionnairesData.features.forEach(function(f) {
         var a = f.attributes || {};
         var ll = extractLatLng(f);
-        rows.push({
-            CODIGO: a.CODIGO,
-            STATUS: a.STATUS_DA_PESQUISA,
-            NOME_ENTREVISTADO: a.NOME_DO_ENTREVISTADO || a.NOME,
-            PROPRIETARIO: a.NOME_DO_PROPRIETARIO,
-            MUNICIPIO: a.MUNICIPIO,
-            BAIRRO: a.BAIRRO_LOCALIDADE,
-            ENDERECO: a.ENDERECO_COMPLETO,
+        var row = {
             LATITUDE: ll ? ll[0] : '',
-            LONGITUDE: ll ? ll[1] : '',
-            TELEFONE: a.TELEFONE,
-            AREA_DECLARADA: a.AREA_URBANA_OU_ZONA_RURAL_DECLARADA,
-            AREA_CLASSIFICADA: a.AREA_URBANA_OU_ZONA_RURAL,
-            TAMANHO_M2: a.TAMANHO_DA_PROPRIEDADE_m2,
-            TIPO_USO: a.TIPO_DE_USO_DO_IMOVEL,
-            BARRAGEM: a.BARRAGEM,
-            OBSERVACOES: a.OBSERVACOES
+            LONGITUDE: ll ? ll[1] : ''
+        };
+        // Todos os campos originais
+        Object.keys(a).forEach(function(k) {
+            row[k] = a[k] != null ? a[k] : '';
         });
+        rows.push(row);
     });
     return rows;
 }
@@ -1130,18 +1121,21 @@ function exportExcel() {
 }
 
 function generateKML(data) {
+    var fields = Object.keys(data[0] || {}).filter(function(f) { return f !== 'LATITUDE' && f !== 'LONGITUDE'; });
     var kml = '<?xml version="1.0" encoding="UTF-8"?>\n';
     kml += '<kml xmlns="http://www.opengis.net/kml/2.2">\n';
     kml += '<Document><name>Questionarios PAEBM - SAG</name>\n';
     data.forEach(function(r) {
         if (!r.LATITUDE && !r.LONGITUDE) return;
         kml += '<Placemark>\n';
-        kml += '<name>' + escXml(r.NOME_ENTREVISTADO || r.CODIGO || 'Sem nome') + '</name>\n';
+        kml += '<name>' + escXml(r.NOME_DO_ENTREVISTADO || r.NOME || r.CODIGO || 'Sem nome') + '</name>\n';
         kml += '<description><![CDATA[';
-        kml += 'Código: ' + (r.CODIGO || '') + '<br>';
-        kml += 'Status: ' + (r.STATUS || '') + '<br>';
-        kml += 'Proprietário: ' + (r.PROPRIETARIO || '') + '<br>';
-        kml += 'Endereço: ' + (r.ENDERECO || '');
+        kml += '<table>';
+        fields.forEach(function(f) {
+            var val = r[f] != null ? r[f] : '';
+            kml += '<tr><td><b>' + escXml(f) + ':</b></td><td>' + escXml(String(val)) + '</td></tr>';
+        });
+        kml += '</table>';
         kml += ']]></description>\n';
         kml += '<Point><coordinates>' + r.LONGITUDE + ',' + r.LATITUDE + ',0</coordinates></Point>\n';
         kml += '</Placemark>\n';
