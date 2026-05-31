@@ -947,6 +947,7 @@ function applyFilters() {
             bullet.innerHTML = '<div class="status-pill-left"><div class="status-indicator" style="background:' + sc + '"></div><div><div style="font-weight:600;font-size:12px;color:var(--text-primary)">' + (attrs.NOME_DO_ENTREVISTADO || attrs.NOME || attrs.STATUS_DA_PESQUISA || 'Sem nome') + '</div><div style="font-size:10px;color:var(--text-muted)">' + (attrs.CODIGO || 'S/Cod') + ' - ' + (attrs.STATUS_DA_PESQUISA || 'N/A') + '</div></div></div>';
             bullet.addEventListener('click', (function(ll, mk) {
                 return function() {
+                    if (window.innerWidth <= 768) closeSidebar();
                     map.flyTo(ll, 18, { animate: true, duration: 1.2 });
                     setTimeout(function() { mk.openPopup(); }, 1300);
                 };
