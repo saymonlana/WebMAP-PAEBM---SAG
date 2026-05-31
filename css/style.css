@@ -1014,9 +1014,9 @@ body {
     }
     .leaflet-control-zoom {
         position: fixed !important;
-        bottom: 20px !important;
-        left: 20px !important;
-        top: auto !important;
+        top: 64px !important;
+        left: 22px !important;
+        bottom: auto !important;
         right: auto !important;
     }
     .leaflet-control-scale {
