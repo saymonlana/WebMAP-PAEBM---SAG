@@ -852,7 +852,17 @@ body {
         width: 100%;
         height: 100vh;
     }
+    .leaflet-popup-pane {
+        z-index: 1100 !important;
+    }
+    .leaflet-popup-content-wrapper {
+        z-index: 1100 !important;
+    }
+    .map-legend {
+        z-index: 500 !important;
+    }
     .leaflet-control-layers {
+        z-index: 500 !important;
         border-radius: 10px !important;
         padding: 6px 8px !important;
         font-size: 10px !important;
