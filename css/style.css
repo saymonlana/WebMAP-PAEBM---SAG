@@ -1015,10 +1015,10 @@ body {
     .leaflet-control-zoom {
         position: fixed !important;
         top: 64px !important;
-        left: 34px !important;
-        transform: translateX(-50%) !important;
+        left: 22px !important;
         bottom: auto !important;
         right: auto !important;
+        margin: 0 !important;
     }
     .leaflet-control-scale {
         bottom: 50px !important;
