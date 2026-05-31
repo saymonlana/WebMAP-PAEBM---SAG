@@ -1089,6 +1089,111 @@ function showMapControls() {
 }
 
 // =========================================================================
+// 14. EXPORTACAO
+// =========================================================================
+
+function getExportData() {
+    if (!questionnairesData || !questionnairesData.features) return [];
+    var rows = [];
+    questionnairesData.features.forEach(function(f) {
+        var a = f.attributes || {};
+        var ll = extractLatLng(f);
+        rows.push({
+            CODIGO: a.CODIGO,
+            STATUS: a.STATUS_DA_PESQUISA,
+            NOME_ENTREVISTADO: a.NOME_DO_ENTREVISTADO || a.NOME,
+            PROPRIETARIO: a.NOME_DO_PROPRIETARIO,
+            MUNICIPIO: a.MUNICIPIO,
+            BAIRRO: a.BAIRRO_LOCALIDADE,
+            ENDERECO: a.ENDERECO_COMPLETO,
+            LATITUDE: ll ? ll[0] : '',
+            LONGITUDE: ll ? ll[1] : '',
+            TELEFONE: a.TELEFONE,
+            AREA_DECLARADA: a.AREA_URBANA_OU_ZONA_RURAL_DECLARADA,
+            AREA_CLASSIFICADA: a.AREA_URBANA_OU_ZONA_RURAL,
+            TAMANHO_M2: a.TAMANHO_DA_PROPRIEDADE_m2,
+            TIPO_USO: a.TIPO_DE_USO_DO_IMOVEL,
+            BARRAGEM: a.BARRAGEM,
+            OBSERVACOES: a.OBSERVACOES
+        });
+    });
+    return rows;
+}
+
+function exportExcel() {
+    var data = getExportData();
+    if (!data.length) return alert('Nenhum dado para exportar.');
+    var ws = XLSX.utils.json_to_sheet(data);
+    var wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Questionarios');
+    XLSX.writeFile(wb, 'questionarios_paebm_sag.xlsx');
+}
+
+function generateKML(data) {
+    var kml = '<?xml version="1.0" encoding="UTF-8"?>\n';
+    kml += '<kml xmlns="http://www.opengis.net/kml/2.2">\n';
+    kml += '<Document><name>Questionarios PAEBM - SAG</name>\n';
+    data.forEach(function(r) {
+        if (!r.LATITUDE && !r.LONGITUDE) return;
+        kml += '<Placemark>\n';
+        kml += '<name>' + escXml(r.NOME_ENTREVISTADO || r.CODIGO || 'Sem nome') + '</name>\n';
+        kml += '<description><![CDATA[';
+        kml += 'Código: ' + (r.CODIGO || '') + '<br>';
+        kml += 'Status: ' + (r.STATUS || '') + '<br>';
+        kml += 'Proprietário: ' + (r.PROPRIETARIO || '') + '<br>';
+        kml += 'Endereço: ' + (r.ENDERECO || '');
+        kml += ']]></description>\n';
+        kml += '<Point><coordinates>' + r.LONGITUDE + ',' + r.LATITUDE + ',0</coordinates></Point>\n';
+        kml += '</Placemark>\n';
+    });
+    kml += '</Document></kml>';
+    return kml;
+}
+
+function escXml(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function downloadBlob(content, filename, mime) {
+    var blob = new Blob([content], { type: mime });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function() { URL.revokeObjectURL(url); }, 5000);
+}
+
+function exportKML() {
+    var data = getExportData();
+    if (!data.length) return alert('Nenhum dado para exportar.');
+    var kml = generateKML(data);
+    downloadBlob(kml, 'questionarios_paebm_sag.kml', 'application/vnd.google-earth.kml+xml');
+}
+
+function exportKMZ() {
+    var data = getExportData();
+    if (!data.length) return alert('Nenhum dado para exportar.');
+    if (typeof JSZip === 'undefined') return alert('JSZip nao carregado.');
+    var kml = generateKML(data);
+    var zip = new JSZip();
+    zip.file('doc.kml', kml);
+    zip.generateAsync({ type: 'blob' }).then(function(blob) {
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = 'questionarios_paebm_sag.kmz';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(function() { URL.revokeObjectURL(url); }, 5000);
+    });
+}
+
+// =========================================================================
 // 13. INICIALIZACAO
 // =========================================================================
 window.onload = function() {

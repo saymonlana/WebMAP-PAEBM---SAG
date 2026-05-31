@@ -151,6 +151,19 @@
                 </div>
             </section>
 
+            <!-- Exportação -->
+            <section style="display:flex;gap:6px;padding:4px 0">
+                <button onclick="exportExcel()" class="export-btn" title="Exportar para Excel">
+                    <i class="ti ti-file-spreadsheet"></i> Excel
+                </button>
+                <button onclick="exportKML()" class="export-btn" title="Exportar para KML">
+                    <i class="ti ti-map-pin"></i> KML
+                </button>
+                <button onclick="exportKMZ()" class="export-btn" title="Exportar para KMZ">
+                    <i class="ti ti-archive"></i> KMZ
+                </button>
+            </section>
+
         </div>
     </aside>
 
@@ -223,6 +236,10 @@
     <script src="js/data_zss.js"></script>
     
     <script src="js/map.js"></script>
+
+    <!-- Bibliotecas de Exportação -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
     
 </body>
 </html>
