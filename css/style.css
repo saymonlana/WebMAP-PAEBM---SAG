@@ -904,10 +904,11 @@ body {
         box-sizing: border-box !important;
     }
     .legend-title {
-        font-size: 7.5px !important;
+        font-size: 8px !important;
         margin-bottom: 3px !important;
         padding-bottom: 2px !important;
         white-space: nowrap !important;
+        text-align: center !important;
     }
     .legend-item {
         font-size: 9px !important;

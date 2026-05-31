@@ -1009,18 +1009,20 @@ function isMobile() {
 
 function hideMapControls() {
     if (!isMobile()) return;
-    var legend = document.querySelector('.map-legend');
-    var layers = document.querySelector('.leaflet-control-layers');
-    var scale = document.querySelector('.leaflet-control-scale');
-    var north = document.querySelector('.north-arrow');
-    var zoom = document.querySelector('.leaflet-control-zoom');
-    var toggle = document.getElementById('mobileToggle');
-    if (legend) legend.style.display = 'none';
-    if (layers) layers.style.display = 'none';
-    if (scale) scale.style.display = 'none';
-    if (north) north.style.display = 'none';
-    if (zoom) zoom.style.display = 'none';
-    if (toggle) toggle.style.display = 'none';
+    setTimeout(function() {
+        var legend = document.querySelector('.map-legend');
+        var layers = document.querySelector('.leaflet-control-layers');
+        var scale = document.querySelector('.leaflet-control-scale');
+        var north = document.querySelector('.north-arrow');
+        var zoom = document.querySelector('.leaflet-control-zoom');
+        var toggle = document.getElementById('mobileToggle');
+        if (legend) legend.style.display = 'none';
+        if (layers) layers.style.display = 'none';
+        if (scale) scale.style.display = 'none';
+        if (north) north.style.display = 'none';
+        if (zoom) zoom.style.display = 'none';
+        if (toggle) toggle.style.display = 'none';
+    }, 150);
 }
 
 function showMapControls() {
