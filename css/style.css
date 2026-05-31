@@ -832,7 +832,7 @@ body {
 .mobile-toggle {
     display: flex;
     position: fixed;
-    top: 60px;
+    top: 12px;
     left: 318px;
     z-index: 1100;
     width: 44px;
@@ -860,7 +860,7 @@ body {
         left: -320px !important;
     }
     .leaflet-control-zoom {
-        margin-top: 120px !important;
+        margin-top: 64px !important;
     }
 }
 
