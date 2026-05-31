@@ -1015,7 +1015,8 @@ body {
     .leaflet-control-zoom {
         position: fixed !important;
         top: 64px !important;
-        left: 22px !important;
+        left: 34px !important;
+        transform: translateX(-50%) !important;
         bottom: auto !important;
         right: auto !important;
     }
