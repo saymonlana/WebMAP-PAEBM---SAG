@@ -1094,6 +1094,7 @@ function showMapControls() {
 
 function getExportData() {
     if (!questionnairesData || !questionnairesData.features) return [];
+    var dateFields = ['DATA', 'DATA_TENTATIVA_2', 'DATA_TENTATIVA_3'];
     var rows = [];
     questionnairesData.features.forEach(function(f) {
         var a = f.attributes || {};
@@ -1102,9 +1103,12 @@ function getExportData() {
             LATITUDE: ll ? ll[0] : '',
             LONGITUDE: ll ? ll[1] : ''
         };
-        // Todos os campos originais
         Object.keys(a).forEach(function(k) {
-            row[k] = a[k] != null ? a[k] : '';
+            var val = a[k] != null ? a[k] : '';
+            if (val && dateFields.indexOf(k) >= 0 && typeof val === 'number' && val > 100000000000) {
+                val = new Date(val).toLocaleDateString('pt-BR');
+            }
+            row[k] = val;
         });
         rows.push(row);
     });
