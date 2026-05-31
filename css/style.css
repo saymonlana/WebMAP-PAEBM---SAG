@@ -876,9 +876,10 @@ body {
         overflow: visible !important;
     }
     .legend-title {
-        font-size: 9px !important;
+        font-size: 8px !important;
         margin-bottom: 3px !important;
         padding-bottom: 2px !important;
+        white-space: nowrap !important;
     }
     .legend-item {
         font-size: 9px !important;
