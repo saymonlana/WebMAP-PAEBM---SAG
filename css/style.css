@@ -859,6 +859,9 @@ body {
     .sidebar.collapsed {
         left: -320px !important;
     }
+    .leaflet-control-zoom {
+        margin-top: 120px !important;
+    }
 }
 
 .sidebar-overlay {
