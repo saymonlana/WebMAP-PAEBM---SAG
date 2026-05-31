@@ -1172,18 +1172,182 @@ function exportKML() {
     downloadBlob(kml, 'questionarios_paebm_sag.kml', 'application/vnd.google-earth.kml+xml');
 }
 
-function exportKMZ() {
+function exportSHP() {
     var data = getExportData();
     if (!data.length) return alert('Nenhum dado para exportar.');
     if (typeof JSZip === 'undefined') return alert('JSZip nao carregado.');
-    var kml = generateKML(data);
+
+    var fields = Object.keys(data[0]).filter(function(f) { return f !== 'LATITUDE' && f !== 'LONGITUDE'; });
+    var numRecords = data.length;
+    var hasGeom = 0;
+    data.forEach(function(r) { if (r.LATITUDE && r.LONGITUDE) hasGeom++; });
+
+    // --- DBF (atributos) ---
+    var fieldInfo = fields.map(function(f) {
+        var maxLen = 1;
+        data.forEach(function(r) {
+            var v = r[f] != null ? String(r[f]) : '';
+            if (v.length > maxLen) maxLen = v.length;
+        });
+        var type = 'C'; // Character by default
+        // Check if numeric
+        var isNum = true;
+        data.forEach(function(r) {
+            var v = r[f];
+            if (v !== '' && v != null && isNaN(Number(v))) isNum = false;
+        });
+        if (isNum && maxLen <= 18) type = 'N';
+        return { name: f.substring(0, 10), type: type, len: Math.min(maxLen + 1, 254) };
+    });
+
+    var headerLen = 32 + fieldInfo.length * 32 + 1;
+    var recordLen = 1;
+    fieldInfo.forEach(function(f) { recordLen += f.len; });
+
+    function buildDBF() {
+        var buf = new ArrayBuffer(headerLen + numRecords * recordLen);
+        var dv = new DataView(buf);
+        var now = new Date();
+        // Version
+        dv.setUint8(0, 0x03);
+        // Date YY MM DD
+        dv.setUint8(1, now.getFullYear() - 1900);
+        dv.setUint8(2, now.getMonth() + 1);
+        dv.setUint8(3, now.getDate());
+        // Num records
+        dv.setUint32(4, numRecords, true);
+        // Header length
+        dv.setUint16(8, headerLen, true);
+        // Record length
+        dv.setUint16(10, recordLen, true);
+        // Reserved
+        for (var i = 12; i < 32; i++) dv.setUint8(i, 0);
+
+        // Field descriptors
+        var offset = 32;
+        fieldInfo.forEach(function(f) {
+            for (var j = 0; j < 11; j++) {
+                dv.setUint8(offset + j, j < f.name.length ? f.name.charCodeAt(j) : 0);
+            }
+            dv.setUint8(offset + 11, f.type.charCodeAt(0));
+            dv.setUint32(offset + 12, 0, true);
+            dv.setUint8(offset + 16, f.len);
+            dv.setUint8(offset + 17, 0);
+            for (var j = 18; j < 32; j++) dv.setUint8(offset + j, 0);
+            offset += 32;
+        });
+        // Terminator
+        dv.setUint8(offset, 0x0D);
+        offset++;
+
+        // Records
+        for (var ri = 0; ri < numRecords; ri++) {
+            dv.setUint8(offset, 0x20); // not deleted
+            offset++;
+            var r = data[ri];
+            fieldInfo.forEach(function(f) {
+                var v = r[f.name] != null ? String(r[f.name]) : '';
+                if (v.length > f.len) v = v.substring(0, f.len);
+                for (var j = 0; j < f.len; j++) {
+                    dv.setUint8(offset + j, j < v.length ? v.charCodeAt(j) : (f.type === 'N' ? 0 : 32));
+                }
+                offset += f.len;
+            });
+        }
+        return buf;
+    }
+
+    // --- SHP (geometria) ---
+    var shpRecordLen = 24; // 8 header + 4 shapeType + 8 X + 8 Y
+    var shpContentSize = shpRecordLen / 2; // in 16-bit words (excluding 8-byte header)
+
+    function buildSHP() {
+        var fileLen = 50 + numRecords * (4 + shpContentSize); // 50 = header (100 bytes = 50 words)
+        var buf = new ArrayBuffer(fileLen * 2);
+        var dv = new DataView(buf);
+        // Header
+        writeShpHeader(dv, fileLen, 1);
+        var recordOffset = 50; // in words
+        for (var i = 0; i < numRecords; i++) {
+            var r = data[i];
+            var recContentLen = shpContentSize;
+            dv.setInt32(recordOffset * 2, i + 1, false); // Record number (big endian)
+            dv.setInt32(recordOffset * 2 + 4, recContentLen, false); // Content length (big endian)
+            var recStart = recordOffset * 2 + 8;
+            dv.setInt32(recStart, 1); // ShapeType Point
+            dv.setFloat64(recStart + 4, r.LONGITUDE || 0, true); // X
+            dv.setFloat64(recStart + 12, r.LATITUDE || 0, true); // Y
+            recordOffset += 4 + recContentLen;
+        }
+        return buf;
+    }
+
+    function buildSHX() {
+        var numRec = hasGeom;
+        var fileLen = 50 + numRec * 4; // 50 words header + 4 words per record
+        var buf = new ArrayBuffer(fileLen * 2);
+        var dv = new DataView(buf);
+        writeShpHeader(dv, fileLen, 1);
+        var recordOffset = 50;
+        var shpRecOffset = 50; // first record starts at word 50
+        for (var i = 0; i < numRecords; i++) {
+            var r = data[i];
+            if (!r.LATITUDE && !r.LONGITUDE) continue;
+            dv.setInt32(recordOffset * 2, shpRecOffset, false); // Offset (big endian)
+            dv.setInt32(recordOffset * 2 + 4, shpContentSize, false); // Content length (big endian)
+            recordOffset += 4;
+            shpRecOffset += 4 + shpContentSize;
+        }
+        return buf;
+    }
+
+    function writeShpHeader(dv, fileLen, shapeType) {
+        dv.setInt32(0, 9994, false); // File Code (big endian)
+        dv.setInt32(4, 0, false); // Unused
+        dv.setInt32(8, 0, false); // Unused
+        dv.setInt32(12, 0, false); // Unused
+        dv.setInt32(16, 0, false); // Unused
+        dv.setInt32(20, 0, false); // Unused
+        dv.setInt32(24, 0, false); // Unused
+        dv.setInt32(28, 0, false); // Unused
+        dv.setInt32(32, 0, false); // Unused
+        dv.setInt32(36, 0, false); // Unused
+        // Bounding Box (Xmin, Ymin, Xmax, Ymax)
+        var xmin = Infinity, ymin = Infinity, xmax = -Infinity, ymax = -Infinity;
+        data.forEach(function(r) {
+            if (r.LATITUDE && r.LONGITUDE) {
+                if (r.LONGITUDE < xmin) xmin = r.LONGITUDE;
+                if (r.LATITUDE < ymin) ymin = r.LATITUDE;
+                if (r.LONGITUDE > xmax) xmax = r.LONGITUDE;
+                if (r.LATITUDE > ymax) ymax = r.LATITUDE;
+            }
+        });
+        dv.setFloat64(36, xmin === Infinity ? 0 : xmin, true);
+        dv.setFloat64(44, ymin === Infinity ? 0 : ymin, true);
+        dv.setFloat64(52, xmax === -Infinity ? 0 : xmax, true);
+        dv.setFloat64(60, ymax === -Infinity ? 0 : ymax, true);
+        dv.setFloat64(68, 0, true); // Zmin
+        dv.setFloat64(76, 0, true); // Zmax
+        dv.setFloat64(84, 0, true); // Mmin
+        dv.setFloat64(92, 0, true); // Mmax
+        dv.setInt32(100, shapeType, true); // ShapeType (little endian)
+    }
+
+    // --- PRJ ---
+    var prj = 'GEOGCS["WGS 84",DATUM["WGS_1984",SPHEROID["WGS 84",6378137,298.257223563,AUTHORITY["EPSG","7030"]],AUTHORITY["EPSG","6326"]],PRIMEM["Greenwich",0,AUTHORITY["EPSG","8901"]],UNIT["degree",0.0174532925199433,AUTHORITY["EPSG","9122"]],AUTHORITY["EPSG","4326"]]';
+
+    // --- ZIP ---
     var zip = new JSZip();
-    zip.file('doc.kml', kml);
+    zip.file('questionarios.dbf', buildDBF());
+    zip.file('questionarios.shp', buildSHP());
+    zip.file('questionarios.shx', buildSHX());
+    zip.file('questionarios.prj', prj);
+
     zip.generateAsync({ type: 'blob' }).then(function(blob) {
         var url = URL.createObjectURL(blob);
         var a = document.createElement('a');
         a.href = url;
-        a.download = 'questionarios_paebm_sag.kmz';
+        a.download = 'questionarios_paebm_sag.zip';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
