@@ -853,7 +853,22 @@ body {
         height: 100vh;
     }
     .leaflet-popup-pane {
-        z-index: 1100 !important;
+        z-index: 2000 !important;
+    }
+    .leaflet-popup-content-wrapper {
+        z-index: 2000 !important;
+    }
+    .leaflet-popup-tip {
+        z-index: 2000 !important;
+    }
+    .leaflet-popup-tip-container {
+        z-index: 2000 !important;
+    }
+    .map-legend {
+        z-index: 400 !important;
+    }
+    .leaflet-control-layers {
+        z-index: 400 !important;
     }
     .leaflet-popup-content-wrapper {
         z-index: 1100 !important;

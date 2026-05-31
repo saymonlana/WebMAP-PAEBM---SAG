@@ -95,6 +95,9 @@ function initMap() {
 
     addMapLegend();
     setupEventListeners();
+
+    map.on('popupopen', function() { hideMapControls(); });
+    map.on('popupclose', function() { showMapControls(); });
 }
 
 // =========================================================================
@@ -999,6 +1002,33 @@ window.toggleSidebar = function() {
     sidebar.classList.toggle('open');
     overlay.classList.toggle('open');
 };
+
+function isMobile() {
+    return window.innerWidth <= 768;
+}
+
+function hideMapControls() {
+    if (!isMobile()) return;
+    var legend = document.querySelector('.map-legend');
+    var layers = document.querySelector('.leaflet-control-layers');
+    var scale = document.querySelector('.leaflet-control-scale');
+    var north = document.querySelector('.north-arrow');
+    if (legend) legend.style.display = 'none';
+    if (layers) layers.style.display = 'none';
+    if (scale) scale.style.display = 'none';
+    if (north) north.style.display = 'none';
+}
+
+function showMapControls() {
+    var legend = document.querySelector('.map-legend');
+    var layers = document.querySelector('.leaflet-control-layers');
+    var scale = document.querySelector('.leaflet-control-scale');
+    var north = document.querySelector('.north-arrow');
+    if (legend) legend.style.display = '';
+    if (layers) layers.style.display = '';
+    if (scale) scale.style.display = '';
+    if (north) north.style.display = '';
+}
 
 // =========================================================================
 // 13. INICIALIZACAO
