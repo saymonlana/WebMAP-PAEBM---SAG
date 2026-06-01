@@ -26,6 +26,7 @@ var map;
 var markerClusterGroup;
 var zasLayer;
 var zssLayer;
+var centroUrbanoLayer;
 var allMarkers = [];
 var selectedStatus = 'ALL';
 var searchTerm = '';
@@ -82,6 +83,7 @@ function initMap() {
     // Camadas poligonais primeiro (ficam ATRAS)
     zasLayer = L.layerGroup().addTo(map);
     zssLayer = L.layerGroup().addTo(map);
+    centroUrbanoLayer = L.layerGroup().addTo(map);
 
     // Pontos por cima (ficam NA FRENTE)
     markerClusterGroup = L.layerGroup();
@@ -89,7 +91,7 @@ function initMap() {
 
     L.control.layers(
         { "Google Earth": googleSat },
-        { "Questionários": markerClusterGroup, "ZSS": zssLayer, "ZAS": zasLayer },
+        { "Questionários": markerClusterGroup, "Centro Urbano": centroUrbanoLayer, "ZSS": zssLayer, "ZAS": zasLayer },
         { position: 'topright', collapsed: false }
     ).addTo(map);
 
@@ -113,7 +115,8 @@ function addMapLegend() {
         '<div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div><span>Proprietário Ausente</span></div>' +
         '<div class="legend-item"><div class="legend-dot" style="background:#ff0033"></div><span>Recusado</span></div>' +
             '<div class="legend-item"><div class="legend-color-box" style="border-color:#2471a3;background:rgba(26,82,118,0.15)"></div><span>ZAS</span></div>' +
-            '<div class="legend-item"><div class="legend-color-box" style="border-color:#3498db;background:rgba(52,152,219,0.15)"></div><span>ZSS</span></div>';
+            '<div class="legend-item"><div class="legend-color-box" style="border-color:#3498db;background:rgba(52,152,219,0.15)"></div><span>ZSS</span></div>' +
+            '<div class="legend-item"><div class="legend-color-box" style="border-color:#555555;background:rgba(85,85,85,0.15)"></div><span>Centro Urbano</span></div>';
         return div;
     };
     legend.addTo(map);
@@ -643,6 +646,44 @@ function renderZss() {
     });
 }
 
+function renderCentroUrbano() {
+    if (!centroUrbanoData || !centroUrbanoData.features) return;
+    console.log('[PAEBM] Renderizando Centro Urbano:', centroUrbanoData.features.length, 'feicoes');
+    centroUrbanoLayer.clearLayers();
+
+    centroUrbanoData.features.forEach(function(feature) {
+        if (!feature.geometry) return;
+
+        if (feature.geometry.rings) {
+            var rings = feature.geometry.rings.map(function(ring) {
+                return ring.map(function(pt) {
+                    // Dados em WGS84 (wkid:4326): pt[0]=lng, pt[1]=lat
+                    return [pt[1], pt[0]];
+                });
+            }).filter(function(ring) { return ring.length > 2; });
+
+            if (rings.length > 0) {
+                var polygon = L.polygon(rings, {
+                    color: '#555555',
+                    fillColor: '#555555',
+                    fillOpacity: 0.15,
+                    weight: 2
+                }).addTo(centroUrbanoLayer);
+
+                var props = feature.attributes || {};
+                polygon.bindPopup(
+                    '<div style="padding:10px;font-family:Outfit,sans-serif">' +
+                    '<h4 style="color:#555555;font-weight:700">CENTRO URBANO</h4>' +
+                    '<p><b>Nome:</b> ' + (props.Name || 'N/A') + '</p>' +
+                    '<p><b>Area:</b> ' + (props.Shape_Area || 0).toFixed(6) + ' graus²</p>' +
+                    '<p><b>Perimetro:</b> ' + (props.Shape_Length || 0).toFixed(6) + ' graus</p>' +
+                    '</div>'
+                );
+            }
+        }
+    });
+}
+
 // =========================================================================
 // 8. AUTO-CENTRALIZACAO
 // =========================================================================
@@ -669,6 +710,13 @@ function fitAllBounds() {
         }
     });
 
+    centroUrbanoLayer.eachLayer(function(layer) {
+        if (typeof layer.getBounds === 'function') {
+            bounds.extend(layer.getBounds());
+            hasPoints = true;
+        }
+    });
+
     if (hasPoints && bounds.isValid()) {
         map.fitBounds(bounds, { padding: [50, 50] });
     }
@@ -680,6 +728,7 @@ function fitAllBounds() {
 var questionnairesData = null;
 var zasData = null;
 var zssData = null;
+var centroUrbanoData = null;
 
 async function tryAutoLoadData() {
     console.log('[PAEBM] Iniciando carregamento automatico de dados...');
@@ -688,7 +737,8 @@ async function tryAutoLoadData() {
     var preloaded = [
         { data: self.DATA_QUESTIONARIOS, key: 'questionnaires', label: 'Questionarios' },
         { data: self.DATA_ZAS, key: 'zas', label: 'ZAS' },
-        { data: self.DATA_ZSS, key: 'zss', label: 'ZSS' }
+        { data: self.DATA_ZSS, key: 'zss', label: 'ZSS' },
+        { data: self.DATA_CENTRO_URBANO, key: 'centroUrbano', label: 'Centro Urbano' }
     ];
 
     var loadedCount = 0;
@@ -706,6 +756,9 @@ async function tryAutoLoadData() {
             } else if (item.key === 'zss') {
                 zssData = item.data;
                 renderZss();
+            } else if (item.key === 'centroUrbano') {
+                centroUrbanoData = item.data;
+                renderCentroUrbano();
             }
             loadedCount++;
         }
@@ -716,7 +769,8 @@ async function tryAutoLoadData() {
         var sources = [
             { url: 'DADOS_COMPILADOS_PAEBM_SAG_JSON.json', key: 'questionnaires', label: 'Questionarios' },
             { url: 'ZAS.json', key: 'zas', label: 'ZAS' },
-            { url: 'ZSS.json', key: 'zss', label: 'ZSS' }
+            { url: 'ZSS.json', key: 'zss', label: 'ZSS' },
+            { url: 'CENTRO_URBANO_JSON.json', key: 'centroUrbano', label: 'Centro Urbano' }
         ];
 
         for (var i = 0; i < sources.length; i++) {
@@ -724,7 +778,8 @@ async function tryAutoLoadData() {
             // Pular se ja foi carregado via script tag
             if ((src.key === 'questionnaires' && questionnairesData) ||
                 (src.key === 'zas' && zasData) ||
-                (src.key === 'zss' && zssData)) continue;
+                (src.key === 'zss' && zssData) ||
+                (src.key === 'centroUrbano' && centroUrbanoData)) continue;
             try {
                 console.log('[PAEBM] Carregando ' + src.label + ': ' + src.url);
                 var response = await fetch(src.url);
@@ -742,6 +797,9 @@ async function tryAutoLoadData() {
                 } else if (src.key === 'zss') {
                     zssData = data;
                     renderZss();
+                } else if (src.key === 'centroUrbano') {
+                    centroUrbanoData = data;
+                    renderCentroUrbano();
                 }
 
                 loadedCount++;
@@ -802,6 +860,9 @@ function handleLocalFiles(files) {
                 } else if (name.indexOf('zss') >= 0) {
                     zssData = data;
                     renderZss();
+                } else if (name.indexOf('centro_urbano') >= 0) {
+                    centroUrbanoData = data;
+                    renderCentroUrbano();
                 }
                 fitAllBounds();
                 closeLoaderModal();

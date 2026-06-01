@@ -180,14 +180,14 @@
             <p class="loader-desc">
                 Por questões de segurança, os navegadores modernos bloqueiam a leitura direta de arquivos locais ao abrir arquivos HTML por clique duplo (erro CORS no protocolo <i>file://</i>).
                 <br><br>
-                Por favor, <b>arraste e solte</b> os 3 arquivos JSON da pasta abaixo neste painel para carregar o mapa instantaneamente:
+                Por favor, <b>arraste e solte</b> os arquivos JSON da pasta abaixo neste painel para carregar o mapa instantaneamente:
             </p>
             
             <!-- Zona de Drop -->
             <div class="dropzone" id="dropzone">
                 <i class="ti ti-file-text" style="font-size: 32px;"></i>
                 <span class="dropzone-text">Arraste os arquivos aqui ou Clique para Selecionar</span>
-                <span class="dropzone-subtext">Compatível com ZAS.json, ZSS.json e DADOS_COMPILADOS_PAEBM_SAG_JSON.json</span>
+                <span class="dropzone-subtext">Compatível com ZAS.json, ZSS.json, CENTRO_URBANO_JSON.json e DADOS_COMPILADOS_PAEBM_SAG_JSON.json</span>
                 <input type="file" id="fileInput" multiple style="display: none;">
             </div>
 
@@ -209,6 +209,12 @@
                     <div class="file-status-left">
                         <div class="file-status-badge"></div>
                         <span>ZSS.json</span>
+                    </div>
+                </div>
+                <div class="file-status-item" data-file="CENTRO_URBANO_JSON.json">
+                    <div class="file-status-left">
+                        <div class="file-status-badge"></div>
+                        <span>CENTRO_URBANO_JSON.json</span>
                     </div>
                 </div>
             </div>
@@ -234,6 +240,7 @@
     <script src="js/data_questionarios.js"></script>
     <script src="js/data_zas.js"></script>
     <script src="js/data_zss.js"></script>
+    <script src="js/data_centro_urbano.js"></script>
     
     <script src="js/map.js"></script>
 

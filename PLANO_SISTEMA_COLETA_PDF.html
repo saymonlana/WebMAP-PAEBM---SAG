@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Plano - Sistema de Coleta de Dados em Campo</title>
+<style>
+@page { margin: 2cm; size: A4; }
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', Arial, sans-serif; color: #1a1a2e; background: #fff; line-height: 1.6; padding: 40px; max-width: 900px; margin: auto; }
+
+h1 { font-size: 28px; font-weight: 800; color: #0d5c3a; border-bottom: 4px solid #0d5c3a; padding-bottom: 12px; margin-bottom: 8px; }
+.subtitle { font-size: 14px; color: #64748b; margin-bottom: 40px; }
+
+h2 { font-size: 20px; font-weight: 700; color: #0d5c3a; margin-top: 32px; margin-bottom: 12px; border-left: 4px solid #0d5c3a; padding-left: 12px; }
+h3 { font-size: 16px; font-weight: 700; color: #1e293b; margin-top: 24px; margin-bottom: 8px; }
+h4 { font-size: 14px; font-weight: 700; color: #334155; margin-top: 16px; margin-bottom: 6px; }
+
+p, li { font-size: 13px; color: #334155; }
+p { margin-bottom: 10px; }
+
+ul, ol { margin-left: 20px; margin-bottom: 14px; }
+li { margin-bottom: 4px; }
+
+.diagrama { background: #f0fdf4; border: 2px solid #86efac; border-radius: 12px; padding: 20px; font-family: monospace; font-size: 13px; line-height: 2; margin: 16px 0; text-align: center; color: #166534; }
+.diagrama .seta { color: #86efac; font-size: 18px; display: block; }
+
+.tabela { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 12px; }
+.tabela th { background: #0d5c3a; color: #fff; padding: 10px 12px; text-align: left; font-weight: 600; }
+.tabela td { padding: 8px 12px; border-bottom: 1px solid #e2e8f0; }
+.tabela tr:nth-child(even) { background: #f8fafc; }
+.tabela tr:hover { background: #f0fdf4; }
+.tabela .verde { color: #16a34a; font-weight: 700; }
+.tabela .amarelo { color: #ca8a04; font-weight: 700; }
+.tabela .vermelho { color: #dc2626; font-weight: 700; }
+
+.card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; margin: 14px 0; }
+.card h4 { margin-top: 0; }
+.card .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+.card .item { font-size: 12px; }
+.card .item b { display: block; color: #475569; }
+
+.comparativa { margin: 16px 0; }
+.comparativa table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.comparativa th { background: #0d5c3a; color: #fff; padding: 10px 8px; text-align: center; font-weight: 600; }
+.comparativa th:first-child { text-align: left; }
+.comparativa td { padding: 8px; border-bottom: 1px solid #e2e8f0; text-align: center; }
+.comparativa td:first-child { text-align: left; font-weight: 600; }
+.comparativa tr:nth-child(even) { background: #f8fafc; }
+
+.checklist { list-style: none; margin-left: 0; }
+.checklist li { background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2316a34a' stroke-width='2'%3E%3Crect x='3' y='3' width='18' height='18' rx='2'/%3E%3C/svg%3E") left center no-repeat; background-size: 16px; padding-left: 24px; margin-bottom: 6px; }
+
+.obs { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px 16px; font-size: 12px; color: #92400e; margin: 10px 0; }
+.obs strong { color: #78350f; }
+
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+.tag-verde { background: #dcfce7; color: #166534; }
+.tag-amarelo { background: #fef3c7; color: #92400e; }
+.tag-azul { background: #dbeafe; color: #1e40af; }
+.tag-vermelho { background: #fce4ec; color: #c62828; }
+
+.page-break { page-break-before: always; }
+
+.rodape { margin-top: 50px; padding-top: 20px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8; text-align: center; }
+</style>
+</head>
+<body>
+
+<h1>Sistema de Coleta de Dados em Campo</h1>
+<div class="subtitle">Plano de implementa&ccedil;&atilde;o para WebMap PAEBM &mdash; Santo Ant&ocirc;nio do Grama &mdash; MG</div>
+
+<!-- ============================================================ -->
+<h2>1. Vis&atilde;o Geral do Sistema</h2>
+
+<p>Tr&ecirc;s componentes que trabalham juntos:</p>
+
+<div class="diagrama">
+  <b>COLETA EM CAMPO</b><br>
+  T&eacute;cnico com celular (offline)<br>
+  &bull; Marca ponto no mapa<br>
+  &bull; Preenche formul&aacute;rio<br>
+  &bull; Tira foto<br>
+  <span class="seta">▼</span>
+  <b>SINCRONIZA&Ccedil;&Atilde;O</b><br>
+  Quando o celular pegar internet, envia os dados<br>
+  <span class="seta">▼</span>
+  <b>TEMPO REAL</b><br>
+  WebMap atualiza automaticamente<br>
+  Gerente acompanha em tempo real
+</div>
+
+<ul>
+  <li><strong>Offline:</strong> O t&eacute;cnico coleta o dia inteiro sem internet. Dados ficam salvos no celular.</li>
+  <li><strong>Sincroniza&ccedil;&atilde;o:</strong> Quando o celular pegar sinal (4G, Wi-Fi), envia tudo automaticamente.</li>
+  <li><strong>Tempo real:</strong> Assim que chega no servidor, aparece no WebMap na hora. N&atilde;o precisa recarregar a p&aacute;gina.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2>2. O que o Servidor Precisa Ter</h2>
+
+<table class="tabela">
+  <tr><th>Componente</th><th>O que faz</th><th>Opc&otilde;es</th></tr>
+  <tr><td><strong>Banco de dados</strong></td><td>Guarda as coletas, usu&aacute;rios, projetos, fotos</td><td>PocketBase (SQLite), PostgreSQL</td></tr>
+  <tr><td><strong>API</strong></td><td>Ponte entre o celular e o banco de dados</td><td>PocketBase (j&aacute; inclui API pronta)</td></tr>
+  <tr><td><strong>Armazenamento de fotos</strong></td><td>Guarda as imagens tiradas no campo</td><td>PocketBase, disco local, S3</td></tr>
+</table>
+
+<div class="obs">
+  <strong>&#9432; Recomenda&ccedil;&atilde;o:</strong> PocketBase &eacute; um &uacute;nico arquivo .exe que faz tudo (banco + API + arquivos). N&atilde;o precisa instalar nada.
+</div>
+
+<!-- ============================================================ -->
+<h2>3. Op&ccedil;&otilde;es de Servidor</h2>
+
+<h3>3.1 Servidor Local na Empresa <span class="tag tag-verde">RECOMENDADO</span></h3>
+
+<p>Um computador na empresa rodando 24 horas com PocketBase.</p>
+
+<div class="card">
+  <div class="grid">
+    <div class="item"><b>Hardware</b>Qualquer PC velho (Core i3, 4 GB RAM, HD 500 GB)</div>
+    <div class="item"><b>Software</b>PocketBase (1 arquivo .exe, sem instala&ccedil;&atilde;o)</div>
+    <div class="item"><b>Internet</b>Banda larga da empresa</div>
+    <div class="item"><b>Custo</b><span class="tag tag-verde">R$ 0</span></div>
+    <div class="item"><b>Manuten&ccedil;&atilde;o</b>Algu&eacute;m ligar o PC e deixar rodando</div>
+    <div class="item"><b>Cart&atilde;o</b><span class="tag tag-verde">N&atilde;o precisa</span></div>
+  </div>
+</div>
+
+<p><strong>Funcionamento:</strong></p>
+<ul>
+  <li>O PocketBase escuta numa porta (ex: <code>http://192.168.1.100:8090</code>)</li>
+  <li>Celulares na mesma rede acessam direto</li>
+  <li>Para acessar de fora (campo), precisa de:
+    <ul>
+      <li>DNS gr&aacute;tis tipo No-IP (<code>empresa.no-ip.org</code>)</li>
+      <li>Roteador com porta 8090 liberada</li>
+    </ul>
+  </li>
+</ul>
+
+<table class="tabela">
+  <tr><th>Pr&oacute;s</th><th>Contras</th></tr>
+  <tr><td class="verde">Dados 100% na empresa</td><td class="vermelho">Se cair energia/local, sincroniza&ccedil;&atilde;o para</td></tr>
+  <tr><td class="verde">Custo zero</td><td class="vermelho">Precisa de roteador configurado</td></tr>
+  <tr><td class="verde">Sem cart&atilde;o de cr&eacute;dito</td><td class="vermelho">Dispon&iacute;vel s&oacute; no hor&aacute;rio comercial</td></tr>
+</table>
+
+<div class="page-break"></div>
+
+<h3>3.2 Servidor Cloud (Oracle Cloud - Sempre Gr&aacute;tis)</h3>
+
+<p>Um computador alugado na nuvem da Oracle que funciona 24h sem pagar nada.</p>
+
+<div class="card">
+  <div class="grid">
+    <div class="item"><b>Plano</b>Oracle Cloud "Always Free"</div>
+    <div class="item"><b>Especifica&ccedil;&otilde;es</b>2 CPUs AMD + 1 GB RAM + 100 GB SSD</div>
+    <div class="item"><b>Custo</b><span class="tag tag-verde">R$ 0</span></div>
+    <div class="item"><b>Cart&atilde;o</b><span class="tag tag-amarelo">Pode pedir para verificar</span></div>
+    <div class="item"><b>Sistema</b>Linux (Ubuntu)</div>
+    <div class="item"><b>Disponibilidade</b><span class="tag tag-verde">24 horas por dia</span></div>
+  </div>
+</div>
+
+<table class="tabela">
+  <tr><th>Pr&oacute;s</th><th>Contras</th></tr>
+  <tr><td class="verde">Dispon&iacute;vel 24h, todos os dias</td><td class="vermelho">Precisa de conhecimento de Linux</td></tr>
+  <tr><td class="verde">N&atilde;o depende da infraestrutura da empresa</td><td class="vermelho">Dados ficam fora da empresa (nuvem)</td></tr>
+  <tr><td class="verde">Custo zero (plano gr&aacute;tis permanente)</td><td class="vermelho">Pode pedir cart&atilde;o na cria&ccedil;&atilde;o da conta</td></tr>
+</table>
+
+<h3>3.3 Notebook ligado s&oacute; nos dias de campo</h3>
+
+<p>O notebook da empresa roda o PocketBase apenas quando tem coleta.</p>
+
+<div class="card">
+  <div class="grid">
+    <div class="item"><b>Hardware</b>Qualquer notebook</div>
+    <div class="item"><b>Software</b>PocketBase</div>
+    <div class="item"><b>Custo</b><span class="tag tag-verde">R$ 0</span></div>
+    <div class="item"><b>Cart&atilde;o</b><span class="tag tag-verde">N&atilde;o precisa</span></div>
+  </div>
+</div>
+
+<p><strong>Funcionamento:</strong></p>
+<ul>
+  <li>Nos dias de campo, algu&eacute;m liga o notebook e roda o PocketBase</li>
+  <li>Os t&eacute;cnicos coletam e sincronizam quando chegam no escrit&oacute;rio</li>
+  <li>Desliga no fim do dia</li>
+</ul>
+
+<table class="tabela">
+  <tr><th>Pr&oacute;s</th><th>Contras</th></tr>
+  <tr><td class="verde">Mais simples, n&atilde;o precisa deixar ligado 24h</td><td class="vermelho">N&atilde;o &eacute; tempo real (s&oacute; sincroniza quando volta)</td></tr>
+  <tr><td class="verde">Dados ficam na empresa</td><td class="vermelho">Se esquecer de ligar, n&atilde;o sincroniza</td></tr>
+</table>
+
+<div class="page-break"></div>
+
+<h3>3.4 Tabela Comparativa</h3>
+
+<div class="comparativa">
+<table>
+  <tr>
+    <th>Caracter&iacute;stica</th>
+    <th>PC Local</th>
+    <th>Oracle Cloud</th>
+    <th>Notebook Dias</th>
+  </tr>
+  <tr><td>Custo mensal</td><td class="verde">R$ 0</td><td class="verde">R$ 0</td><td class="verde">R$ 0</td></tr>
+  <tr><td>Cart&atilde;o de cr&eacute;dito</td><td class="verde">N&atilde;o</td><td class="amarelo">Talvez</td><td class="verde">N&atilde;o</td></tr>
+  <tr><td>Tempo real no campo</td><td class="verde">Sim</td><td class="verde">Sim</td><td class="vermelho">N&atilde;o</td></tr>
+  <tr><td>Disponibilidade</td><td>Comercial</td><td class="verde">24h</td><td>Dias de coleta</td></tr>
+  <tr><td>Dados na empresa</td><td class="verde">Sim</td><td class="vermelho">N&atilde;o</td><td class="verde">Sim</td></tr>
+  <tr><td>Conhecimento t&eacute;cnico</td><td>B&aacute;sico</td><td>M&eacute;dio (Linux)</td><td>B&aacute;sico</td></tr>
+</table>
+</div>
+
+<!-- ============================================================ -->
+<h2>4. App de Coleta (PWA)</h2>
+
+<p>O aplicativo que roda no celular do t&eacute;cnico em campo.</p>
+
+<h3>4.1 Funcionalidades</h3>
+
+<ul>
+  <li><strong>Login</strong> com email e senha (cada t&eacute;cnico tem seu pr&oacute;prio login)</li>
+  <li><strong>Escolher projeto</strong> (PAEBM SAG, barragem X, etc.)</li>
+  <li><strong>Mapa</strong> com fundo Google Satellite, funcional mesmo offline</li>
+  <li><strong>Adicionar ponto</strong> — toca no mapa e marca a localiza&ccedil;&atilde;o</li>
+  <li><strong>Formul&aacute;rio</strong> configur&aacute;vel por projeto (perguntas diferentes para cada tipo de coleta)</li>
+  <li><strong>Foto</strong> — tira foto pela c&acirc;mera do celular e anexa ao ponto</li>
+  <li><strong>Salvar offline</strong> — dados ficam seguros no celular mesmo sem sinal</li>
+  <li><strong>Sincronizar</strong> — quando conectar &agrave; internet, envia tudo automaticamente</li>
+  <li><strong>Hist&oacute;rico</strong> — visualizar todas as coletas do dia</li>
+</ul>
+
+<h3>4.2 Como instala no celular</h3>
+
+<ol>
+  <li>Abre o link no Chrome ou Edge do celular</li>
+  <li>O navegador pergunta: "Adicionar &agrave; tela inicial"</li>
+  <li>Pronto — vira um &iacute;cone na tela do celular como qualquer aplicativo</li>
+  <li>Funciona igual um app da loja, mas sem precisar instalar pela Play Store</li>
+</ol>
+
+<!-- ============================================================ -->
+<h2>5. WebMap (j&aacute; existente)</h2>
+
+<p>O WebMap atual (<code>https://web-map-paebm-sag.vercel.app</code>) ser&aacute; adaptado para:</p>
+
+<ul>
+  <li>Al&eacute;m dos dados hist&oacute;ricos, mostrar as <strong>coletas em andamento</strong></li>
+  <li><strong>Atualizar automaticamente</strong> quando novos dados chegam</li>
+  <li><strong>Filtro</strong> por projeto, coletor, data, status</li>
+  <li><strong>Exportar</strong> dados coletados em Excel, Shapefile e KML</li>
+  <li>Acess&iacute;vel de qualquer computador ou celular</li>
+</ul>
+
+<div class="page-break"></div>
+
+<!-- ============================================================ -->
+<h2>6. M&uacute;ltiplos Projetos e Pessoas</h2>
+
+<p>O sistema foi planejado para crescer.</p>
+
+<h3>6.1 V&aacute;rios projetos</h3>
+<p>Cada projeto vira uma "collection" no banco. Voc&ecirc; cadastra:</p>
+<ul>
+  <li>PAEBM Santo Ant&ocirc;nio do Grama</li>
+  <li>PAEBM Outra Barragem</li>
+  <li>Levantamento de Nascentes</li>
+  <li>Cadastro de Propriedades</li>
+  <li>Qualquer outro levantamento de campo</li>
+</ul>
+<p>Cada projeto tem seu pr&oacute;prio formul&aacute;rio (perguntas diferentes).</p>
+
+<h3>6.2 V&aacute;rias pessoas coletando</h3>
+<ul>
+  <li>Cada coletor tem <strong>login &uacute;nico</strong> (email + senha)</li>
+  <li>Voc&ecirc; controla <strong>quem acessa o qu&ecirc;</strong>:
+    <ul>
+      <li>Fulano: coleta s&oacute; do Projeto A</li>
+      <li>Ciclano: coleta de todos os projetos</li>
+      <li>Gerente: s&oacute; visualiza&ccedil;&atilde;o no WebMap</li>
+    </ul>
+  </li>
+  <li>Dados ficam centralizados — ningu&eacute;m perde planilha</li>
+  <li>WebMap mostra tudo em tempo real, filtrado por projeto ou coletor</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2>7. Cronograma de Implementa&ccedil;&atilde;o</h2>
+
+<h3>Fase 1 — Prova de Conceito (1 semana)</h3>
+<ul class="checklist">
+  <li>Montar servidor PocketBase no escrit&oacute;rio (qualquer PC)</li>
+  <li>Criar app de coleta simples com um projeto piloto</li>
+  <li>Testar coleta no celular com um t&eacute;cnico</li>
+  <li>Ver dados aparecendo no WebMap</li>
+</ul>
+
+<h3>Fase 2 — Expans&atilde;o (2 semanas)</h3>
+<ul class="checklist">
+  <li>Configurar acesso remoto (No-IP + roteador)</li>
+  <li>Criar cadastro de projetos e usu&aacute;rios</li>
+  <li>Testar com m&uacute;ltiplos t&eacute;cnicos simultaneamente</li>
+  <li>Ajustar formul&aacute;rios por projeto</li>
+</ul>
+
+<h3>Fase 3 — Produ&ccedil;&atilde;o (1 semana)</h3>
+<ul class="checklist">
+  <li>Escolher op&ccedil;&atilde;o de servidor definitiva</li>
+  <li>Treinar equipe de campo</li>
+  <li>Iniciar uso real</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2>8. Recursos Humanos Necess&aacute;rios</h2>
+
+<table class="tabela">
+  <tr><th>Fun&ccedil;&atilde;o</th><th>Responsabilidade</th><th>Conhecimento</th></tr>
+  <tr><td><strong>Administrador do sistema</strong></td><td>Instalar e manter o servidor, criar projetos e usu&aacute;rios</td><td>Inform&aacute;tica b&aacute;sica (ligar PC, baixar arquivo)</td></tr>
+  <tr><td><strong>T&eacute;cnico de campo</strong></td><td>Usar o app no celular para coletar dados</td><td>Usar smartphone (b&aacute;sico)</td></tr>
+  <tr><td><strong>Desenvolvedor (eu)</strong></td><td>Criar o app de coleta, adaptar WebMap, configurar PocketBase</td><td>Programa&ccedil;&atilde;o web</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2>9. Pr&oacute;ximo Passo</h2>
+
+<p>Se quiser seguir com o projeto, o pr&oacute;ximo passo &eacute;:</p>
+
+<ol>
+  <li><strong>Instalar o PocketBase</strong> num computador da empresa para testar</li>
+  <li><strong>Eu crio o app de coleta</strong> conectado a esse servidor</li>
+  <li><strong>Testamos com um t&eacute;cnico</strong> no campo</li>
+</ol>
+
+<div class="obs">
+  <strong>&#9432;</strong> O PocketBase &eacute; um &uacute;nico arquivo .exe de 15 MB. N&atilde;o precisa instalar nada, n&atilde;o precisa de banco de dados, n&atilde;o precisa de configura&ccedil;&atilde;o. S&oacute; baixar e rodar.
+</div>
+
+<!-- ============================================================ -->
+<div class="rodape">
+  Plano elaborado em 31 de maio de 2026<br>
+  WebMap PAEBM — Santo Ant&ocirc;nio do Grama &mdash; MG
+</div>
+
+</body>
+</html>
