@@ -1425,10 +1425,14 @@ window.onload = function() {
     console.log('[PAEBM] Inicializando...');
     console.log('[PAEBM] ==========================================');
 
-    // Sidebar inicia fechada no desktop
-    if (window.innerWidth > 768) {
-        document.getElementById('sidebar').classList.add('collapsed');
-        document.getElementById('mobileToggle').style.left = '12px';
+    // Sidebar inicia ABERTA em desktop e mobile
+    if (window.innerWidth <= 768) {
+        document.getElementById('sidebar').classList.add('open');
+        document.getElementById('sidebarOverlay').classList.add('open');
+        document.getElementById('mobileToggle').style.left = 'auto';
+        document.getElementById('mobileToggle').style.right = '12px';
+    } else {
+        document.getElementById('mobileToggle').style.left = '318px';
     }
 
     initMap();
