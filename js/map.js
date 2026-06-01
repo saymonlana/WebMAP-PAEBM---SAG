@@ -1067,7 +1067,7 @@ window.toggleSidebar = function() {
             toggle.style.right = 'auto';
             toggle.querySelector('i').className = 'ti ti-menu-2';
         } else {
-            toggle.style.left = '318px';
+            toggle.style.left = '314px';
             toggle.style.right = 'auto';
             toggle.querySelector('i').className = 'ti ti-x';
         }
@@ -1418,7 +1418,7 @@ window.onload = function() {
         document.getElementById('mobileToggle').style.right = '12px';
         document.getElementById('mobileToggle').querySelector('i').className = 'ti ti-x';
     } else {
-        document.getElementById('mobileToggle').style.left = '318px';
+        document.getElementById('mobileToggle').style.left = '314px';
         document.getElementById('mobileToggle').style.right = 'auto';
         document.getElementById('mobileToggle').querySelector('i').className = 'ti ti-x';
     }
