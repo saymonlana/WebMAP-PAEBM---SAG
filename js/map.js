@@ -580,15 +580,7 @@ function renderZas() {
                     weight: 2
                 }).addTo(zasLayer);
 
-                var props = feature.attributes || {};
-                polygon.bindPopup(
-                    '<div style="padding:10px;font-family:Outfit,sans-serif">' +
-                    '<h4 style="color:#2471a3;font-weight:700">ZONA DE SALVAMENTO AUTÔNOMO (ZAS)</h4>' +
-                    '<p><b>Estrutura:</b> ' + (props.nome_strut || 'N/A') + '</p>' +
-                    '<p><b>Cenario:</b> ' + (props.cenario || 'N/A') + '</p>' +
-                    '<p><b>Area:</b> ' + (props.area_ha || 0).toFixed(2) + ' ha</p>' +
-                    '</div>'
-                );
+                polygon.interactive = false;
             }
         }
 
@@ -625,15 +617,7 @@ function renderZss() {
                     weight: 2
                 }).addTo(zssLayer);
 
-                var props = feature.attributes || {};
-                polygon.bindPopup(
-                    '<div style="padding:10px;font-family:Outfit,sans-serif">' +
-                    '<h4 style="color:#3498db;font-weight:700">ZONA DE SEGURANÇA SECUNDÁRIA (ZSS)</h4>' +
-                    '<p><b>Estrutura:</b> ' + (props.nome_strut || 'N/A') + '</p>' +
-                    '<p><b>Cenario:</b> ' + (props.cenario || 'N/A') + '</p>' +
-                    '<p><b>Area:</b> ' + (props.area_ha || 0).toFixed(2) + ' ha</p>' +
-                    '</div>'
-                );
+                polygon.interactive = false;
             }
         }
 
@@ -670,15 +654,7 @@ function renderCentroUrbano() {
                     weight: 2
                 }).addTo(centroUrbanoLayer);
 
-                var props = feature.attributes || {};
-                polygon.bindPopup(
-                    '<div style="padding:10px;font-family:Outfit,sans-serif">' +
-                    '<h4 style="color:#555555;font-weight:700">CENTRO URBANO</h4>' +
-                    '<p><b>Nome:</b> ' + (props.Name || 'N/A') + '</p>' +
-                    '<p><b>Area:</b> ' + (props.Shape_Area || 0).toFixed(6) + ' graus²</p>' +
-                    '<p><b>Perimetro:</b> ' + (props.Shape_Length || 0).toFixed(6) + ' graus</p>' +
-                    '</div>'
-                );
+                polygon.interactive = false;
             }
         }
     });
