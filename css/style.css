@@ -834,6 +834,7 @@ body {
     position: fixed;
     top: 70px;
     left: 314px;
+    right: auto;
     z-index: 1100;
     width: 44px;
     height: 44px;
@@ -883,7 +884,7 @@ body {
     }
     .mobile-toggle {
         display: flex;
-        top: 12px;
+        top: 70px;
         left: auto;
         right: 12px;
     }

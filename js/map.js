@@ -1054,21 +1054,25 @@ window.toggleSidebar = function() {
         if (sidebar.classList.contains('open')) {
             toggle.style.left = 'auto';
             toggle.style.right = '12px';
+            toggle.style.top = '70px';
             toggle.querySelector('i').className = 'ti ti-x';
         } else {
-            toggle.style.left = '12px';
+            toggle.style.left = '22px';
             toggle.style.right = 'auto';
+            toggle.style.top = '64px';
             toggle.querySelector('i').className = 'ti ti-menu-2';
         }
     } else {
         sidebar.classList.toggle('collapsed');
         if (sidebar.classList.contains('collapsed')) {
-            toggle.style.left = '12px';
+            toggle.style.left = '22px';
             toggle.style.right = 'auto';
+            toggle.style.top = '64px';
             toggle.querySelector('i').className = 'ti ti-menu-2';
         } else {
             toggle.style.left = '314px';
             toggle.style.right = 'auto';
+            toggle.style.top = '70px';
             toggle.querySelector('i').className = 'ti ti-x';
         }
     }
@@ -1083,15 +1087,17 @@ function closeSidebar() {
         if (sidebar.classList.contains('open')) {
             sidebar.classList.remove('open');
             overlay.classList.remove('open');
-            toggle.style.left = '12px';
+            toggle.style.left = '22px';
             toggle.style.right = 'auto';
+            toggle.style.top = '64px';
             toggle.querySelector('i').className = 'ti ti-menu-2';
         }
     } else {
         if (!sidebar.classList.contains('collapsed')) {
             sidebar.classList.add('collapsed');
-            toggle.style.left = '12px';
+            toggle.style.left = '22px';
             toggle.style.right = 'auto';
+            toggle.style.top = '64px';
             toggle.querySelector('i').className = 'ti ti-menu-2';
         }
     }
@@ -1416,10 +1422,12 @@ window.onload = function() {
         document.getElementById('sidebarOverlay').classList.add('open');
         document.getElementById('mobileToggle').style.left = 'auto';
         document.getElementById('mobileToggle').style.right = '12px';
+        document.getElementById('mobileToggle').style.top = '70px';
         document.getElementById('mobileToggle').querySelector('i').className = 'ti ti-x';
     } else {
         document.getElementById('mobileToggle').style.left = '314px';
         document.getElementById('mobileToggle').style.right = 'auto';
+        document.getElementById('mobileToggle').style.top = '70px';
         document.getElementById('mobileToggle').querySelector('i').className = 'ti ti-x';
     }
 
