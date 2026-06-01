@@ -1067,8 +1067,8 @@ window.toggleSidebar = function() {
             toggle.style.right = 'auto';
             toggle.querySelector('i').className = 'ti ti-menu-2';
         } else {
-            toggle.style.left = 'auto';
-            toggle.style.right = '12px';
+            toggle.style.left = '318px';
+            toggle.style.right = 'auto';
             toggle.querySelector('i').className = 'ti ti-x';
         }
     }
@@ -1418,8 +1418,8 @@ window.onload = function() {
         document.getElementById('mobileToggle').style.right = '12px';
         document.getElementById('mobileToggle').querySelector('i').className = 'ti ti-x';
     } else {
-        document.getElementById('mobileToggle').style.left = 'auto';
-        document.getElementById('mobileToggle').style.right = '12px';
+        document.getElementById('mobileToggle').style.left = '318px';
+        document.getElementById('mobileToggle').style.right = 'auto';
         document.getElementById('mobileToggle').querySelector('i').className = 'ti ti-x';
     }
 
