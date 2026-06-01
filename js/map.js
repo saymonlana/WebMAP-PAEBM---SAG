@@ -1065,7 +1065,7 @@ window.toggleSidebar = function() {
     } else {
         sidebar.classList.toggle('collapsed');
         if (sidebar.classList.contains('collapsed')) {
-            toggle.style.left = '22px';
+            toggle.style.left = '15px';
             toggle.style.right = 'auto';
             toggle.style.top = '64px';
             toggle.querySelector('i').className = 'ti ti-menu-2';
@@ -1087,6 +1087,33 @@ function closeSidebar() {
         if (sidebar.classList.contains('open')) {
             sidebar.classList.remove('open');
             overlay.classList.remove('open');
+            toggle.style.left = '15px';
+            toggle.style.right = 'auto';
+            toggle.style.top = '64px';
+            toggle.querySelector('i').className = 'ti ti-menu-2';
+        }
+    } else {
+        if (!sidebar.classList.contains('collapsed')) {
+            sidebar.classList.add('collapsed');
+            toggle.style.left = '15px';
+            toggle.style.right = 'auto';
+            toggle.style.top = '64px';
+            toggle.querySelector('i').className = 'ti ti-menu-2';
+        }
+    }
+}
+    }
+};
+
+function closeSidebar() {
+    var sidebar = document.getElementById('sidebar');
+    var overlay = document.getElementById('sidebarOverlay');
+    var toggle = document.getElementById('mobileToggle');
+    if (!sidebar) return;
+    if (window.innerWidth <= 768) {
+        if (sidebar.classList.contains('open')) {
+            sidebar.classList.remove('open');
+            overlay.classList.remove('open');
             toggle.style.left = '22px';
             toggle.style.right = 'auto';
             toggle.style.top = '64px';
@@ -1095,9 +1122,9 @@ function closeSidebar() {
     } else {
         if (!sidebar.classList.contains('collapsed')) {
             sidebar.classList.add('collapsed');
-            toggle.style.left = '22px';
+            toggle.style.left = '15px';
             toggle.style.right = 'auto';
-            toggle.style.top = '64px';
+            toggle.style.top = '54px';
             toggle.querySelector('i').className = 'ti ti-menu-2';
         }
     }
