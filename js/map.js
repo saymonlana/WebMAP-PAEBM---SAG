@@ -1,4 +1,4 @@
-﻿/* WebMap PAEBM - Santo Antonio do Grama - MG
+/* WebMap PAEBM - Santo Antonio do Grama - MG
    Rotina robusta de espacializacao de questionarios */
 
 // =========================================================================
