@@ -348,6 +348,7 @@ function createQuestionnairePopup(attrs, residentRecords, animalRecords) {
         '<tr><td class="label-cell">Vínculo c/ Proprietário</td><td class="value-cell">' + v(attrs.VINCULO_COM_PROPRIETARIO_DA_CASA) + '</td></tr>' +
         '<tr><td class="label-cell">Relação c/ Imóvel</td><td class="value-cell">' + v(attrs.RELACAO_DO_ENTREVISTADO_COM_O_IMOVEL) + '</td></tr>' +
         '<tr><td class="label-cell">Município</td><td class="value-cell">' + v(attrs.MUNICIPIO) + '</td></tr>' +
+        '<tr><td class="label-cell">Municípios Projeto</td><td class="value-cell">' + v(attrs.MUNICIPIOS_DECLARADOS_NO_PROJETO) + '</td></tr>' +
         '<tr><td class="label-cell">Bairro/Localidade</td><td class="value-cell">' + v(attrs.BAIRRO_LOCALIDADE) + '</td></tr>' +
         '<tr><td class="label-cell">Endereço Completo</td><td class="value-cell">' + v(attrs.ENDERECO_COMPLETO) + '</td></tr>' +
         '<tr><td class="label-cell">Área Declarada</td><td class="value-cell">' + v(attrs.AREA_URBANA_OU_ZONA_RURAL_DECLARADA) + '</td></tr>' +
@@ -491,7 +492,8 @@ function renderQuestionnaires() {
         var attrs = feature.attributes || {};
         var hasStatus = attrs.STATUS_DA_PESQUISA && String(attrs.STATUS_DA_PESQUISA).trim() !== '';
         var hasAnimal = attrs.NOME_DO_ANIMAL && String(attrs.NOME_DO_ANIMAL).trim() !== '' && String(attrs.NOME_DO_ANIMAL).trim() !== 'null';
-        var hasNome = attrs.NOME_DO_ENTREVISTADO && String(attrs.NOME_DO_ENTREVISTADO).trim() !== '' && String(attrs.NOME_DO_ANIMAL).trim() !== 'null';
+        var nomeVal = attrs.NOME_DO_ENTREVISTADO || attrs.NOME;
+        var hasNome = nomeVal && String(nomeVal).trim() !== '' && String(nomeVal).trim() !== 'null';
 
         if (hasStatus) {
             groups[code].respondent = feature;
