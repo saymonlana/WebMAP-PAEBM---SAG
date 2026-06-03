@@ -1037,7 +1037,9 @@ function updateStats() {
             if (greenStatuses.indexOf(status) >= 0) counts['APLICADO']++;
             if (status === 'RECUSADO') counts['RECUSADO']++;
             if (status === 'PROPRIETARIO AUSENTE') {
-                counts['PROPRIETARIO AUSENTE']++;
+                if (attrs.DATA && attrs.DATA_TENTATIVA_2 && attrs.DATA_TENTATIVA_3) {
+                    counts['PROPRIETARIO AUSENTE']++;
+                }
                 // Se nao tem 3a tentativa, ainda precisa voltar
                 if (!attrs.DATA_TENTATIVA_3) {
                     counts['AUSENTE_VOLTAR']++;
