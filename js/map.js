@@ -227,10 +227,18 @@ function createQuestionnairePopup(attrs, residentRecords, animalRecords) {
     }
 
     // --- ABA ANIMAIS (agregados de registros duplicados) ---
+    var mergedAnimals = (animalRecords && animalRecords.length > 0) ? [].concat(animalRecords) : [];
+    var respAnimal = attrs.NOME_DO_ANIMAL && String(attrs.NOME_DO_ANIMAL).trim();
+    if (respAnimal && respAnimal !== 'null' && respAnimal !== 'N/A') {
+        var alreadyInList = mergedAnimals.some(function(ar) { return ar.attributes && ar.attributes.NOME_DO_ANIMAL === attrs.NOME_DO_ANIMAL; });
+        if (!alreadyInList) {
+            mergedAnimals.unshift({ attributes: attrs });
+        }
+    }
     var animaisHTML = '';
-    if (animalRecords && animalRecords.length > 0) {
-        animaisHTML = '<tr><td class="label-cell" colspan="2" style="background:#f1f5f9;font-weight:700;text-align:center;border-top:2px solid #e2e8f0;padding:8px">ANIMAIS REGISTRADOS (' + animalRecords.length + ')</td></tr>';
-        animalRecords.forEach(function(ar, idx) {
+    if (mergedAnimals.length > 0) {
+        animaisHTML = '<tr><td class="label-cell" colspan="2" style="background:#f1f5f9;font-weight:700;text-align:center;border-top:2px solid #e2e8f0;padding:8px">ANIMAIS REGISTRADOS (' + mergedAnimals.length + ')</td></tr>';
+        mergedAnimals.forEach(function(ar, idx) {
             var a = ar.attributes || {};
             animaisHTML += '<tr style="border-bottom:1px dashed #e2e8f0"><td class="label-cell" style="vertical-align:top"><b>Animal ' + (idx + 1) + '</b></td><td class="value-cell" style="vertical-align:top">' +
                 '<div style="line-height:1.6">' +
