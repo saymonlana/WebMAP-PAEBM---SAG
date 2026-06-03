@@ -227,14 +227,24 @@ function createQuestionnairePopup(attrs, residentRecords, animalRecords) {
     }
 
     // --- ABA ANIMAIS (agregados de registros duplicados) ---
-    var mergedAnimals = (animalRecords && animalRecords.length > 0) ? [].concat(animalRecords) : [];
-    var respAnimal = attrs.NOME_DO_ANIMAL && String(attrs.NOME_DO_ANIMAL).trim();
-    if (respAnimal && respAnimal !== 'null' && respAnimal !== 'N/A') {
-        var alreadyInList = mergedAnimals.some(function(ar) { return ar.attributes && ar.attributes.NOME_DO_ANIMAL === attrs.NOME_DO_ANIMAL; });
-        if (!alreadyInList) {
-            mergedAnimals.unshift({ attributes: attrs });
-        }
+    var mergedAnimals = [];
+    var extraSilvestre = [];
+    function hasValue(v) { return v && String(v).trim() !== '' && String(v).trim() !== 'null' && v !== 'N/A'; }
+    // Respondent's own animal data
+    var respAnimal = hasValue(attrs.NOME_DO_ANIMAL);
+    if (respAnimal) {
+        var alreadyInList = animalRecords && animalRecords.some(function(ar) { return ar.attributes && ar.attributes.NOME_DO_ANIMAL === attrs.NOME_DO_ANIMAL; });
+        if (!alreadyInList) mergedAnimals.push({ attributes: attrs });
     }
+    // Process animal records - separate regular animals from silvestre
+    (animalRecords || []).forEach(function(ar) {
+        var a = ar.attributes || {};
+        if (hasValue(a.NOME_DO_ANIMAL)) {
+            mergedAnimals.push(ar);
+        } else if (hasValue(a.NOME_COMUM) || hasValue(a.QUANTIDADE_)) {
+            extraSilvestre.push(a);
+        }
+    });
     var animaisHTML = '';
     if (mergedAnimals.length > 0) {
         animaisHTML = '<tr><td class="label-cell" colspan="2" style="background:#f1f5f9;font-weight:700;text-align:center;border-top:2px solid #e2e8f0;padding:8px">ANIMAIS REGISTRADOS (' + mergedAnimals.length + ')</td></tr>';
@@ -289,26 +299,30 @@ function createQuestionnairePopup(attrs, residentRecords, animalRecords) {
 
     // Animais silvestres - buscar em todos os registros
     var silvestreHTML = '';
-    var silvestreCount = 0;
     var silvestreList = [];
-    
+    function pushSilvestre(sa) {
+        // Deduplicate by NOME_COMUM
+        var dup = silvestreList.some(function(ex) { return ex.NOME_COMUM === sa.NOME_COMUM; });
+        if (!dup) silvestreList.push(sa);
+    }
     // Buscar no respondent
     if (attrs.ANIMAIS_SILVESTRES_E_EXOTICOS && String(attrs.ANIMAIS_SILVESTRES_E_EXOTICOS).trim().toUpperCase() === 'SIM') {
-        silvestreList.push(attrs);
+        pushSilvestre(attrs);
     }
-    // Buscar nos animais
+    // Buscar nos animais (registros com ANIMAIS_SILVESTRES_E_EXOTICOS=SIM)
     if (animalRecords) {
         for (var si = 0; si < animalRecords.length; si++) {
             var sa = animalRecords[si].attributes || {};
             if (sa.ANIMAIS_SILVESTRES_E_EXOTICOS && String(sa.ANIMAIS_SILVESTRES_E_EXOTICOS).trim().toUpperCase() === 'SIM') {
-                silvestreList.push(sa);
+                pushSilvestre(sa);
             }
         }
     }
-    silvestreCount = silvestreList.length;
+    // Extra silvestre records (have NOME_COMUM/QUANTIDADE_ but no NOME_DO_ANIMAL)
+    extraSilvestre.forEach(function(sa) { pushSilvestre(sa); });
     
-    if (silvestreCount > 0) {
-        silvestreHTML = '<tr><td class="label-cell" colspan="2" style="background:#f1f5f9;font-weight:700;text-align:center;border-top:2px solid #e2e8f0;padding:8px">ANIMAIS SILVESTRES / EXÓTICOS (' + silvestreCount + ')</td></tr>';
+    if (silvestreList.length > 0) {
+        silvestreHTML = '<tr><td class="label-cell" colspan="2" style="background:#f1f5f9;font-weight:700;text-align:center;border-top:2px solid #e2e8f0;padding:8px">ANIMAIS SILVESTRES / EXÓTICOS (' + silvestreList.length + ')</td></tr>';
         silvestreList.forEach(function(sa, idx) {
             silvestreHTML += '<tr style="border-bottom:1px dashed #e2e8f0"><td class="label-cell" style="vertical-align:top"><b>Silvestre ' + (idx + 1) + '</b></td><td class="value-cell" style="vertical-align:top">' +
                 '<div style="line-height:1.6">' +
