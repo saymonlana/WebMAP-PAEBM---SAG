@@ -605,7 +605,9 @@ function renderQuestionnaires() {
         });
 
         marker.bindPopup(createQuestionnairePopup(feature.attributes, group.residents, group.animals), { maxWidth: 400, maxHeight: 500 });
-        marker.bindTooltip(code, { permanent: true, direction: 'top', offset: [0, -10], className: 'marker-label' });
+        marker.bindTooltip(code, { permanent: true, direction: 'top', offset: [0, -10], className: 'marker-label', interactive: true });
+        marker.on('click', function() { marker.openPopup(); });
+        marker.on('tooltipclick', function() { marker.openPopup(); });
 
         allMarkers.push({ marker: marker, feature: feature, latlng: latlng });
         markerClusterGroup.addLayer(marker);
