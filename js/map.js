@@ -1040,6 +1040,8 @@ function applyFilters() {
         var matchStatus = (selectedStatus === 'ALL');
         if (!matchStatus && selectedStatus === 'APLICADO') {
             matchStatus = (status === 'APLICADO' || status === 'IMÓVEL EM CONSTRUÇÃO' || status === 'IMÓVEL VAZIO/DESOCUPADO');
+        } else if (!matchStatus && selectedStatus === 'PROPRIETARIO AUSENTE') {
+            matchStatus = (status === 'PROPRIETARIO AUSENTE' && attrs.DATA && attrs.DATA_TENTATIVA_2 && attrs.DATA_TENTATIVA_3);
         } else if (!matchStatus && selectedStatus === 'AUSENTE_VOLTAR') {
             matchStatus = (status === 'PROPRIETARIO AUSENTE' && !attrs.DATA_TENTATIVA_3);
         } else if (!matchStatus) {
