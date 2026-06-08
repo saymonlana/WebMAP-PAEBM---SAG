@@ -164,8 +164,6 @@ function onLocationFound(e) {
             iconAnchor: [12, 12]
         })
     }).addTo(map);
-
-    map.setView(e.latlng, Math.max(map.getZoom(), 16));
 }
 
 function onLocationError(e) {
