@@ -131,37 +131,14 @@ function addMapLegend() {
 }
 
 // =========================================================================
-// 4B. CONTROLE DE LOCALIZACAO (GPS - apenas mobile, permanente)
+// 4B. LOCALIZACAO GPS AUTOMATICA (apenas mobile)
 // =========================================================================
 var userMarker = null;
 var userAccuracyCircle = null;
 
 function addLocateControl() {
     if (window.innerWidth > 768) return;
-
-    var btn = L.control({ position: 'bottomleft' });
-    btn.onAdd = function() {
-        var div = L.DomUtil.create('button', 'leaflet-control-locate');
-        div.innerHTML = '<i class="ti ti-current-location"></i>';
-        div.title = 'Minha Localização';
-        div.addEventListener('click', function(e) {
-            L.DomEvent.stopPropagation(e);
-            L.DomEvent.preventDefault(e);
-            startLocation();
-        });
-        return div;
-    };
-    btn.addTo(map);
-}
-
-function startLocation() {
-    var btn = document.querySelector('.leaflet-control-locate');
-    if (btn) {
-        btn.classList.add('active');
-        btn.disabled = true;
-        btn.style.opacity = '1';
-    }
-    map.locate({ setView: true, maxZoom: 18, enableHighAccuracy: true, watch: true });
+    map.locate({ setView: false, enableHighAccuracy: true, watch: true });
     map.on('locationfound', onLocationFound);
     map.on('locationerror', onLocationError);
 }
@@ -192,8 +169,6 @@ function onLocationFound(e) {
 }
 
 function onLocationError(e) {
-    var btn = document.querySelector('.leaflet-control-locate');
-    if (btn) btn.disabled = false;
     console.warn('Erro de localizacao:', e.message);
 }
 
