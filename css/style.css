@@ -17,7 +17,7 @@
     /* Status Colors */
     --color-aplicado: #10b981;       /* Verde - Aplicado */
     --color-construcao: #10b981;     /* Verde - Em Construção */
-    --color-ausente: #f59e0b;        /* Amarelo - Ausente */
+    --color-ausente: #facc15;        /* Amarelo claro - Ausente */
     --color-vazio: #10b981;          /* Verde - Vazio/Desocupado */
     --color-recusa: #ef4444;         /* Vermelho - Recusa */
     --color-outros: #64748b;         /* Slate */
