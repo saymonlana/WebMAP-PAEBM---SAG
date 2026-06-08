@@ -41,7 +41,7 @@ var DEFAULT_ZOOM = 14;
 var STATUS_CONFIG = {
     'APLICADO':              { color: '#10b981', label: 'Questionário Aplicado' },
     'IMÓVEL EM CONSTRUÇÃO':  { color: '#10b981', label: 'Imóvel em Construção' },
-    'PROPRIETARIO AUSENTE':  { color: '#facc15', label: 'Proprietário Ausente' },
+    'PROPRIETARIO AUSENTE':  { color: '#fde047', label: 'Proprietário Ausente' },
     'IMÓVEL VAZIO/DESOCUPADO': { color: '#10b981', label: 'Imóvel Vazio/Desocupado' },
     'RECUSADO':              { color: '#ff0033', label: 'Recusado' }
 };
@@ -119,7 +119,7 @@ function addMapLegend() {
             '<div class="legend-title">Questionários PAEBM - SAG</div>' +
         '<div class="legend-item"><div class="legend-dot" style="background:#10b981"></div><span>Aplicado / Construção / Vazio</span></div>' +
         '<div class="legend-item"><div class="legend-dot" style="background:#f97316"></div><span>Ausente - Ainda Voltar</span></div>' +
-        '<div class="legend-item"><div class="legend-dot" style="background:#facc15"></div><span>Proprietário Ausente</span></div>' +
+        '<div class="legend-item"><div class="legend-dot" style="background:#fde047"></div><span>Proprietário Ausente</span></div>' +
         '<div class="legend-item"><div class="legend-dot" style="background:#ff0033"></div><span>Recusado</span></div>' +
             '<div class="legend-item"><div class="legend-color-box" style="border-color:#2471a3;background:rgba(26,82,118,0.15)"></div><span>ZAS</span></div>' +
             '<div class="legend-item"><div class="legend-color-box" style="border-color:#3498db;background:rgba(52,152,219,0.15)"></div><span>ZSS</span></div>' +
@@ -942,7 +942,7 @@ function initStatusFilterUI() {
 
     var filtros = [
         { key: 'APLICADO', label: 'Questionários Aplicados', color: '#10b981', count: aplicadosCount },
-        { key: 'PROPRIETARIO AUSENTE', label: 'Proprietários Ausentes', color: '#facc15', count: ausentesCom3Datas },
+        { key: 'PROPRIETARIO AUSENTE', label: 'Proprietários Ausentes', color: '#fde047', count: ausentesCom3Datas },
         { key: 'AUSENTE_VOLTAR', label: 'Ausentes - Ainda Voltar', color: '#f59e0b', count: ausentesVoltarCount },
         { key: 'RECUSADO', label: 'Recusados', color: '#ef4444', count: counts['RECUSADO'] || 0 }
     ];
