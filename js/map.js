@@ -131,11 +131,10 @@ function addMapLegend() {
 }
 
 // =========================================================================
-// 4B. CONTROLE DE LOCALIZACAO (GPS - apenas mobile)
+// 4B. CONTROLE DE LOCALIZACAO (GPS - apenas mobile, permanente)
 // =========================================================================
 var userMarker = null;
 var userAccuracyCircle = null;
-var isLocating = false;
 
 function addLocateControl() {
     if (window.innerWidth > 768) return;
@@ -148,28 +147,20 @@ function addLocateControl() {
         div.addEventListener('click', function(e) {
             L.DomEvent.stopPropagation(e);
             L.DomEvent.preventDefault(e);
-            toggleLocation();
+            startLocation();
         });
         return div;
     };
     btn.addTo(map);
 }
 
-function toggleLocation() {
-    if (isLocating) {
-        map.stopLocate();
-        map.off('locationfound', onLocationFound);
-        map.off('locationerror', onLocationError);
-        if (userMarker) { map.removeLayer(userMarker); userMarker = null; }
-        if (userAccuracyCircle) { map.removeLayer(userAccuracyCircle); userAccuracyCircle = null; }
-        isLocating = false;
-        var btn = document.querySelector('.leaflet-control-locate');
-        if (btn) btn.classList.remove('active');
-        return;
-    }
-    isLocating = true;
+function startLocation() {
     var btn = document.querySelector('.leaflet-control-locate');
-    if (btn) btn.classList.add('active');
+    if (btn) {
+        btn.classList.add('active');
+        btn.disabled = true;
+        btn.style.opacity = '1';
+    }
     map.locate({ setView: true, maxZoom: 18, enableHighAccuracy: true, watch: true });
     map.on('locationfound', onLocationFound);
     map.on('locationerror', onLocationError);
@@ -201,9 +192,8 @@ function onLocationFound(e) {
 }
 
 function onLocationError(e) {
-    isLocating = false;
     var btn = document.querySelector('.leaflet-control-locate');
-    if (btn) btn.classList.remove('active');
+    if (btn) btn.disabled = false;
     console.warn('Erro de localizacao:', e.message);
 }
 
