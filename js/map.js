@@ -52,6 +52,12 @@ function getStatusColor(status) {
     return STATUS_CONFIG[clean] ? STATUS_CONFIG[clean].color : '#10b981';
 }
 
+function getMarkerColor(attrs) {
+    var st = (attrs.STATUS_DA_PESQUISA || '').trim().toUpperCase();
+    if (st === 'PROPRIETARIO AUSENTE' && !attrs.DATA_TENTATIVA_3) return '#f97316';
+    return getStatusColor(attrs.STATUS_DA_PESQUISA);
+}
+
 // =========================================================================
 // 3. INICIALIZACAO DO MAPA
 // =========================================================================
@@ -112,6 +118,7 @@ function addMapLegend() {
         div.innerHTML =
             '<div class="legend-title">Questionários PAEBM - SAG</div>' +
         '<div class="legend-item"><div class="legend-dot" style="background:#10b981"></div><span>Aplicado / Construção / Vazio</span></div>' +
+        '<div class="legend-item"><div class="legend-dot" style="background:#f97316"></div><span>Ausente - Ainda Voltar</span></div>' +
         '<div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div><span>Proprietário Ausente</span></div>' +
         '<div class="legend-item"><div class="legend-dot" style="background:#ff0033"></div><span>Recusado</span></div>' +
             '<div class="legend-item"><div class="legend-color-box" style="border-color:#2471a3;background:rgba(26,82,118,0.15)"></div><span>ZAS</span></div>' +
@@ -544,7 +551,7 @@ function renderQuestionnaires() {
         if (latlng[0] < -90 || latlng[0] > 90 || latlng[1] < -180 || latlng[1] > 180) return;
 
         var status = feature.attributes.STATUS_DA_PESQUISA || '';
-        var statusColor = getStatusColor(status);
+        var statusColor = getMarkerColor(feature.attributes);
 
         var marker = L.circleMarker(latlng, {
             radius: 7,
@@ -1006,7 +1013,7 @@ function applyFilters() {
             var bullet = document.createElement('div');
             bullet.className = 'status-pill-item';
             bullet.style.margin = '4px 0';
-            var sc = getStatusColor(attrs.STATUS_DA_PESQUISA);
+            var sc = getMarkerColor(attrs);
             bullet.style.borderLeft = '3px solid ' + sc;
             bullet.style.background = sc + '18';
             bullet.innerHTML = '<div class="status-pill-left"><div class="status-indicator" style="background:' + sc + '"></div><div><div style="font-weight:600;font-size:12px;color:var(--text-primary)">' + (attrs.NOME_DO_ENTREVISTADO || attrs.NOME || attrs.STATUS_DA_PESQUISA || 'Sem nome') + '</div><div style="font-size:10px;color:var(--text-muted)">' + (attrs.CODIGO || 'S/Cod') + ' - ' + (attrs.STATUS_DA_PESQUISA || 'N/A') + '</div></div></div>';
