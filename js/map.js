@@ -70,6 +70,7 @@ function initMap() {
     map = L.map('map', {
         center: DEFAULT_CENTER,
         zoom: DEFAULT_ZOOM,
+        maxZoom: 20,
         layers: [googleSat]
     });
 
