@@ -102,6 +102,7 @@ function initMap() {
     ).addTo(map);
 
     addMapLegend();
+    addLocateControl();
     setupEventListeners();
 
     map.on('popupopen', function() { hideMapControls(); });
@@ -127,6 +128,83 @@ function addMapLegend() {
         return div;
     };
     legend.addTo(map);
+}
+
+// =========================================================================
+// 4B. CONTROLE DE LOCALIZACAO (GPS - apenas mobile)
+// =========================================================================
+var userMarker = null;
+var userAccuracyCircle = null;
+var isLocating = false;
+
+function addLocateControl() {
+    if (window.innerWidth > 768) return;
+
+    var btn = L.control({ position: 'bottomleft' });
+    btn.onAdd = function() {
+        var div = L.DomUtil.create('button', 'leaflet-control-locate');
+        div.innerHTML = '<i class="ti ti-current-location"></i>';
+        div.title = 'Minha Localização';
+        div.addEventListener('click', function(e) {
+            L.DomEvent.stopPropagation(e);
+            L.DomEvent.preventDefault(e);
+            toggleLocation();
+        });
+        return div;
+    };
+    btn.addTo(map);
+}
+
+function toggleLocation() {
+    if (isLocating) {
+        map.stopLocate();
+        map.off('locationfound', onLocationFound);
+        map.off('locationerror', onLocationError);
+        if (userMarker) { map.removeLayer(userMarker); userMarker = null; }
+        if (userAccuracyCircle) { map.removeLayer(userAccuracyCircle); userAccuracyCircle = null; }
+        isLocating = false;
+        var btn = document.querySelector('.leaflet-control-locate');
+        if (btn) btn.classList.remove('active');
+        return;
+    }
+    isLocating = true;
+    var btn = document.querySelector('.leaflet-control-locate');
+    if (btn) btn.classList.add('active');
+    map.locate({ setView: true, maxZoom: 18, enableHighAccuracy: true, watch: true });
+    map.on('locationfound', onLocationFound);
+    map.on('locationerror', onLocationError);
+}
+
+function onLocationFound(e) {
+    var radius = e.accuracy / 2;
+    if (userAccuracyCircle) map.removeLayer(userAccuracyCircle);
+    userAccuracyCircle = L.circle(e.latlng, radius, {
+        color: '#4285F4',
+        fillColor: '#4285F4',
+        fillOpacity: 0.1,
+        weight: 1,
+        opacity: 0.3
+    }).addTo(map);
+
+    if (userMarker) map.removeLayer(userMarker);
+    var heading = e.heading || 0;
+    userMarker = L.marker(e.latlng, {
+        icon: L.divIcon({
+            className: 'user-location-marker',
+            html: '<div class="user-location-dot"><div class="user-location-arrow" style="transform: rotate(' + heading + 'deg)"></div></div>',
+            iconSize: [24, 24],
+            iconAnchor: [12, 12]
+        })
+    }).addTo(map);
+
+    map.setView(e.latlng, Math.max(map.getZoom(), 16));
+}
+
+function onLocationError(e) {
+    isLocating = false;
+    var btn = document.querySelector('.leaflet-control-locate');
+    if (btn) btn.classList.remove('active');
+    console.warn('Erro de localizacao:', e.message);
 }
 
 // =========================================================================
