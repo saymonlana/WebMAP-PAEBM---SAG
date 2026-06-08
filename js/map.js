@@ -921,17 +921,21 @@ function initStatusFilterUI() {
     var aplicadosCount = 0;
     greenStatuses.forEach(function(s) { aplicadosCount += counts[s] || 0; });
 
-    // Contar ausentes que ainda precisam voltar (sem 3a tentativa)
+    // Contar ausentes com 3 datas preenchidas (card) e que ainda precisam voltar
+    var ausentesCom3Datas = 0;
     var ausentesVoltarCount = 0;
     allMarkers.forEach(function(item) {
         var a = item.feature.attributes;
         var st = (a.STATUS_DA_PESQUISA || '').trim().toUpperCase();
-        if (st === 'PROPRIETARIO AUSENTE' && !a.DATA_TENTATIVA_3) ausentesVoltarCount++;
+        if (st === 'PROPRIETARIO AUSENTE') {
+            if (a.DATA && a.DATA_TENTATIVA_2 && a.DATA_TENTATIVA_3) ausentesCom3Datas++;
+            if (!a.DATA_TENTATIVA_3) ausentesVoltarCount++;
+        }
     });
 
     var filtros = [
         { key: 'APLICADO', label: 'Questionários Aplicados', color: '#10b981', count: aplicadosCount },
-        { key: 'PROPRIETARIO AUSENTE', label: 'Proprietários Ausentes', color: '#f59e0b', count: counts['PROPRIETARIO AUSENTE'] || 0 },
+        { key: 'PROPRIETARIO AUSENTE', label: 'Proprietários Ausentes', color: '#f59e0b', count: ausentesCom3Datas },
         { key: 'AUSENTE_VOLTAR', label: 'Ausentes - Ainda Voltar', color: '#f59e0b', count: ausentesVoltarCount },
         { key: 'RECUSADO', label: 'Recusados', color: '#ef4444', count: counts['RECUSADO'] || 0 }
     ];
