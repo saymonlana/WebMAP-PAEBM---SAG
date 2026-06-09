@@ -1186,8 +1186,12 @@ window.toggleSidebar = function() {
         overlay.classList.toggle('open');
         if (sidebar.classList.contains('open')) {
             toggle.querySelector('i').className = 'ti ti-x';
+            toggle.style.left = '300px';
+            toggle.style.top = '14px';
         } else {
             toggle.querySelector('i').className = 'ti ti-menu-2';
+            toggle.style.left = '11px';
+            toggle.style.top = '12px';
         }
     } else {
         sidebar.classList.toggle('collapsed');
@@ -1213,6 +1217,8 @@ function closeSidebar() {
             sidebar.classList.remove('open');
             overlay.classList.remove('open');
             toggle.querySelector('i').className = 'ti ti-menu-2';
+            toggle.style.left = '11px';
+            toggle.style.top = '12px';
         }
     } else {
         if (!sidebar.classList.contains('collapsed')) {
@@ -1548,6 +1554,9 @@ window.onload = function() {
     if (window.innerWidth > 768) {
         toggle.style.left = '314px';
         toggle.style.top = '70px';
+    } else {
+        toggle.style.left = '300px';
+        toggle.style.top = '14px';
     }
 
     initMap();
