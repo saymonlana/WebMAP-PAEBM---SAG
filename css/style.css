@@ -1109,7 +1109,9 @@ body {
         padding: 1px 4px !important;
     }
     .north-arrow {
-        padding: 2px !important;
+        padding: 0 !important;
+        width: 38px;
+        height: 38px;
     }
     .north-arrow svg {
         width: 20px !important;
