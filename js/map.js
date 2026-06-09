@@ -1197,7 +1197,7 @@ window.toggleSidebar = function() {
             toggle.style.top = '140px';
         } else {
             toggle.querySelector('i').className = 'ti ti-x';
-            toggle.style.left = '288px';
+            toggle.style.left = '314px';
             toggle.style.top = '70px';
         }
     }
@@ -1546,7 +1546,7 @@ window.onload = function() {
     var toggle = document.getElementById('mobileToggle');
     toggle.querySelector('i').className = 'ti ti-x';
     if (window.innerWidth > 768) {
-        toggle.style.left = '288px';
+        toggle.style.left = '314px';
         toggle.style.top = '70px';
     }
 
