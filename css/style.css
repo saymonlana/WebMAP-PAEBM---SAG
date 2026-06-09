@@ -913,7 +913,7 @@ body {
 /* Botão Toggle Sidebar — fora da sidebar, centralizado abaixo dos controles de zoom */
 .map-toggle {
     display: flex;
-    position: absolute;
+    position: fixed;
     top: 140px;
     left: 17px;
     z-index: 1100;
