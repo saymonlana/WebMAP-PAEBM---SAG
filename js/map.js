@@ -166,7 +166,7 @@ function addLocateControl() {
             return btn;
         }
     });
-    new L.Control.LocateBtn({ position: 'topleft' }).addTo(map);
+    new L.Control.LocateBtn({ position: 'bottomleft' }).addTo(map);
 }
 
 function centerOnUser() {
