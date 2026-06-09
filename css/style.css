@@ -1116,6 +1116,7 @@ body {
         height: 22px !important;
     }
     .leaflet-bottom.leaflet-left {
+        position: fixed !important;
         bottom: 14px !important;
         z-index: 1101 !important;
     }
