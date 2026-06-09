@@ -487,7 +487,60 @@ body {
     filter: drop-shadow(0 1px 2px rgba(0,0,0,0.3));
 }
 
+/* Botão "Minha Localização" no mapa */
+.locate-control-btn {
+    width: 38px;
+    height: 38px;
+    background: var(--bg-glass);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-glass);
+    border-radius: 10px;
+    box-shadow: var(--shadow-premium);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a8d5ba;
+    transition: all 0.25s ease;
+    margin-top: 6px;
+}
+.locate-control-btn:hover {
+    background: rgba(66, 133, 244, 0.25);
+    border-color: #4285F4;
+    color: #4285F4;
+    transform: scale(1.08);
+}
+.locate-control-btn.located {
+    color: #4285F4;
+    border-color: rgba(66, 133, 244, 0.5);
+    background: rgba(66, 133, 244, 0.12);
+}
+.locate-control-btn.locating svg {
+    animation: locate-pulse 1s ease-in-out infinite;
+}
+@keyframes locate-pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.6; }
+}
 
+/* Pulse no marcador do usuário */
+.user-location-dot::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: rgba(66, 133, 244, 0.4);
+    animation: location-ring 2s ease-out infinite;
+}
+@keyframes location-ring {
+    0%   { transform: translate(-50%, -50%) scale(1); opacity: 0.6; }
+    100% { transform: translate(-50%, -50%) scale(3); opacity: 0; }
+}
 
 /* Beautiful Custom Marker Clusters */
 .marker-cluster-custom {
@@ -856,25 +909,26 @@ body {
     50% { transform: translateY(-8px); }
 }
 
-/* Botão Toggle Sidebar */
+/* Botão Toggle Sidebar — ancorado na borda direita da sidebar */
 .mobile-toggle {
     display: flex;
-    position: fixed;
+    position: absolute;
     top: 70px;
-    left: 314px;
-    right: auto;
+    right: -22px;           /* sai pela borda direita da sidebar */
+    left: auto;
     z-index: 1100;
     width: 44px;
     height: 44px;
-    border-radius: 12px;
+    border-radius: 0 12px 12px 0;   /* arredondado só no lado de fora */
     background: var(--bg-glass);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--border-glass);
+    border-left: none;               /* funde visualmente com a sidebar */
     color: #fff;
     font-size: 22px;
     cursor: pointer;
-    box-shadow: var(--shadow-premium);
+    box-shadow: 4px 0 12px rgba(0,0,0,0.25);
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
@@ -883,10 +937,16 @@ body {
     transform: scale(0.92);
 }
 
-/* Sidebar colapsada no desktop */
+/* Sidebar colapsada no desktop/tablet — botão ainda fica visível */
 @media(min-width: 769px) {
     .sidebar.collapsed {
         left: -320px !important;
+    }
+    /* Quando colapsada, o botão (right:-22px) vai junto e fica em left: -320+300-(-22) = 2px,
+       visualmente preso à margem esquerda da tela */
+    .sidebar.collapsed .mobile-toggle {
+        right: -44px;      /* empurra mais para fora, garantindo visibilidade */
+        border-radius: 0 12px 12px 0;
     }
     .leaflet-control-zoom {
         margin-top: 64px !important;
@@ -910,11 +970,11 @@ body {
     body {
         flex-direction: column;
     }
+    /* No mobile a sidebar desliza da esquerda — botão fica na borda direita da sidebar */
     .mobile-toggle {
-        display: flex;
-        top: 70px;
-        left: auto;
-        right: 12px;
+        top: 14px;              /* topo da sidebar (que começa em top:0 no mobile) */
+        right: -44px;           /* fora da borda direita, sempre visível */
+        border-radius: 0 12px 12px 0;
     }
     .sidebar {
         position: fixed;
@@ -924,6 +984,7 @@ body {
         height: 100vh;
         border-radius: 0;
         z-index: 1000;
+        overflow: visible;   /* garante que o botão apareça fora da borda */
         transition: left 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         border: none;
         border-right: 1px solid var(--border-glass);

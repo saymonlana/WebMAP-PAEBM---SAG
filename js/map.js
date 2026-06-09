@@ -132,22 +132,69 @@ function addMapLegend() {
 }
 
 // =========================================================================
-// 4B. LOCALIZACAO GPS AUTOMATICA (apenas mobile)
+// 4B. LOCALIZACAO GPS (celular, tablet e desktop)
 // =========================================================================
 var userMarker = null;
 var userAccuracyCircle = null;
+var lastKnownLocation = null;
+var locationWatching = false;
 
 function addLocateControl() {
-    if (window.innerWidth > 768) return;
-    map.locate({ setView: false, enableHighAccuracy: true, watch: true });
-    map.on('locationfound', onLocationFound);
-    map.on('locationerror', onLocationError);
+    // Iniciar rastreamento de localização em TODOS os dispositivos
+    if (!locationWatching) {
+        locationWatching = true;
+        map.locate({ setView: false, enableHighAccuracy: true, watch: true, maximumAge: 5000, timeout: 15000 });
+        map.on('locationfound', onLocationFound);
+        map.on('locationerror', onLocationError);
+    }
+
+    // Adicionar botão de "Minha Localização" visível no mapa
+    L.Control.LocateBtn = L.Control.extend({
+        onAdd: function() {
+            var btn = L.DomUtil.create('div', 'locate-control-btn');
+            btn.id = 'btn-minha-localizacao';
+            btn.title = 'Minha Localização';
+            btn.innerHTML =
+                '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20">' +
+                '<path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5S10.62 6.5 12 6.5s2.5 1.12 2.5 2.5S13.38 11.5 12 11.5z"/>' +
+                '</svg>';
+            L.DomEvent.on(btn, 'click', function(e) {
+                L.DomEvent.stopPropagation(e);
+                centerOnUser();
+            });
+            L.DomEvent.disableClickPropagation(btn);
+            return btn;
+        }
+    });
+    new L.Control.LocateBtn({ position: 'topleft' }).addTo(map);
+}
+
+function centerOnUser() {
+    if (lastKnownLocation) {
+        map.setView(lastKnownLocation, 18, { animate: true });
+    } else {
+        // Forçar nova leitura do GPS
+        map.locate({ setView: true, enableHighAccuracy: true, maxZoom: 18 });
+        var btn = document.getElementById('btn-minha-localizacao');
+        if (btn) {
+            btn.classList.add('locating');
+            setTimeout(function() { btn.classList.remove('locating'); }, 8000);
+        }
+    }
 }
 
 function onLocationFound(e) {
+    lastKnownLocation = e.latlng;
+
+    var btn = document.getElementById('btn-minha-localizacao');
+    if (btn) {
+        btn.classList.remove('locating');
+        btn.classList.add('located');
+    }
+
     var radius = e.accuracy / 2;
     if (userAccuracyCircle) map.removeLayer(userAccuracyCircle);
-    userAccuracyCircle = L.circle(e.latlng, radius, {
+    userAccuracyCircle = L.circle(e.latlng, { radius: radius,
         color: '#4285F4',
         fillColor: '#4285F4',
         fillOpacity: 0.1,
@@ -163,12 +210,15 @@ function onLocationFound(e) {
             html: '<div class="user-location-dot"><div class="user-location-arrow" style="transform: rotate(' + heading + 'deg)"></div></div>',
             iconSize: [24, 24],
             iconAnchor: [12, 12]
-        })
+        }),
+        zIndexOffset: 9999
     }).addTo(map);
 }
 
 function onLocationError(e) {
-    console.warn('Erro de localizacao:', e.message);
+    console.warn('Erro de localizacao GPS:', e.message);
+    var btn = document.getElementById('btn-minha-localizacao');
+    if (btn) btn.classList.remove('locating');
 }
 
 // =========================================================================
@@ -1135,27 +1185,15 @@ window.toggleSidebar = function() {
         sidebar.classList.toggle('open');
         overlay.classList.toggle('open');
         if (sidebar.classList.contains('open')) {
-            toggle.style.left = 'auto';
-            toggle.style.right = '12px';
-            toggle.style.top = '70px';
             toggle.querySelector('i').className = 'ti ti-x';
         } else {
-            toggle.style.left = '22px';
-            toggle.style.right = 'auto';
-            toggle.style.top = '64px';
             toggle.querySelector('i').className = 'ti ti-menu-2';
         }
     } else {
         sidebar.classList.toggle('collapsed');
         if (sidebar.classList.contains('collapsed')) {
-            toggle.style.left = '15px';
-            toggle.style.right = 'auto';
-            toggle.style.top = '64px';
             toggle.querySelector('i').className = 'ti ti-menu-2';
         } else {
-            toggle.style.left = '314px';
-            toggle.style.right = 'auto';
-            toggle.style.top = '70px';
             toggle.querySelector('i').className = 'ti ti-x';
         }
     }
@@ -1170,17 +1208,11 @@ function closeSidebar() {
         if (sidebar.classList.contains('open')) {
             sidebar.classList.remove('open');
             overlay.classList.remove('open');
-            toggle.style.left = '15px';
-            toggle.style.right = 'auto';
-            toggle.style.top = '64px';
             toggle.querySelector('i').className = 'ti ti-menu-2';
         }
     } else {
         if (!sidebar.classList.contains('collapsed')) {
             sidebar.classList.add('collapsed');
-            toggle.style.left = '15px';
-            toggle.style.right = 'auto';
-            toggle.style.top = '64px';
             toggle.querySelector('i').className = 'ti ti-menu-2';
         }
     }
@@ -1503,16 +1535,9 @@ window.onload = function() {
     if (window.innerWidth <= 768) {
         document.getElementById('sidebar').classList.add('open');
         document.getElementById('sidebarOverlay').classList.add('open');
-        document.getElementById('mobileToggle').style.left = 'auto';
-        document.getElementById('mobileToggle').style.right = '12px';
-        document.getElementById('mobileToggle').style.top = '70px';
-        document.getElementById('mobileToggle').querySelector('i').className = 'ti ti-x';
-    } else {
-        document.getElementById('mobileToggle').style.left = '314px';
-        document.getElementById('mobileToggle').style.right = 'auto';
-        document.getElementById('mobileToggle').style.top = '70px';
-        document.getElementById('mobileToggle').querySelector('i').className = 'ti ti-x';
     }
+    // Ícone sempre começa como X (sidebar aberta)
+    document.getElementById('mobileToggle').querySelector('i').className = 'ti ti-x';
 
     initMap();
     tryAutoLoadData();

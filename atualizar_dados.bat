@@ -56,6 +56,7 @@ copy /y "%source%" "DADOS_COMPILADOS_PAEBM_SAG_JSON_4.json" >nul
 copy /y "%source%" "DADOS_COMPILADOS_PAEBM_SAG_JSON_5.json" >nul
 copy /y "%source%" "DADOS_COMPILADOS_PAEBM_SAG_JSON_5_1.json" >nul
 copy /y "%source%" "DADOS_COMPILADOS_PAEBM_SAG_JSON_6.json" >nul
+copy /y "%source%" "DADOS_COMPILADOS_PAEBM_SAG_JSON_7.json" >nul
 echo   - DADOS_COMPILADOS_PAEBM_SAG_JSON.json [OK]
 echo   - DADOS_COMPILADOS_PAEBM_SAG_JSON_2.json [OK]
 echo   - DADOS_COMPILADOS_PAEBM_SAG_JSON_3.json [OK]
@@ -63,6 +64,7 @@ echo   - DADOS_COMPILADOS_PAEBM_SAG_JSON_4.json [OK]
 echo   - DADOS_COMPILADOS_PAEBM_SAG_JSON_5.json [OK]
 echo   - DADOS_COMPILADOS_PAEBM_SAG_JSON_5_1.json [OK]
 echo   - DADOS_COMPILADOS_PAEBM_SAG_JSON_6.json [OK]
+echo   - DADOS_COMPILADOS_PAEBM_SAG_JSON_7.json [OK]
 echo.
 
 echo [4/5] Gerando data_questionarios.js...
@@ -70,7 +72,7 @@ node -e "var j=require('fs').readFileSync('%source%','utf8');require('fs').write
 echo.
 
 echo [5/5] Enviando para o GitHub...
-git add DADOS_COMPILADOS_PAEBM_SAG_JSON.json DADOS_COMPILADOS_PAEBM_SAG_JSON_2.json DADOS_COMPILADOS_PAEBM_SAG_JSON_3.json DADOS_COMPILADOS_PAEBM_SAG_JSON_4.json DADOS_COMPILADOS_PAEBM_SAG_JSON_5.json DADOS_COMPILADOS_PAEBM_SAG_JSON_5_1.json DADOS_COMPILADOS_PAEBM_SAG_JSON_6.json js/data_questionarios.js
+git add DADOS_COMPILADOS_PAEBM_SAG_JSON.json DADOS_COMPILADOS_PAEBM_SAG_JSON_2.json DADOS_COMPILADOS_PAEBM_SAG_JSON_3.json DADOS_COMPILADOS_PAEBM_SAG_JSON_4.json DADOS_COMPILADOS_PAEBM_SAG_JSON_5.json DADOS_COMPILADOS_PAEBM_SAG_JSON_5_1.json DADOS_COMPILADOS_PAEBM_SAG_JSON_6.json DADOS_COMPILADOS_PAEBM_SAG_JSON_7.json js/data_questionarios.js
 git commit -m "Atualizacao automatica de dados PAEBM - %date%"
 git push origin main
 
