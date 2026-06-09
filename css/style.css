@@ -1117,6 +1117,7 @@ body {
     }
     .leaflet-bottom.leaflet-left {
         bottom: 14px !important;
+        z-index: 1101 !important;
     }
     .popup-wrapper {
         max-width: 92vw !important;
