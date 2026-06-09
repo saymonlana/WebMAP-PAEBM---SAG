@@ -30,10 +30,6 @@
 
     <!-- 1. Barra Lateral Flutuante (Painel de Controle Glassmorphic) -->
     <aside class="sidebar" id="sidebar">
-        <!-- Botão Toggle colado na borda direita da sidebar -->
-        <button class="mobile-toggle" id="mobileToggle" onclick="toggleSidebar()">
-            <i class="ti ti-x"></i>
-        </button>
         <!-- Cabeçalho Principal -->
         <header class="sidebar-header">
             <div class="brand-section">
@@ -167,7 +163,12 @@
     </aside>
 
     <!-- 2. Janela de Visualização do Mapa -->
-    <main id="map"></main>
+    <main id="map">
+        <!-- Botão Toggle (fora da sidebar, centralizado abaixo do zoom no desktop) -->
+        <button class="map-toggle" id="mobileToggle" onclick="toggleSidebar()">
+            <i class="ti ti-x"></i>
+        </button>
+    </main>
 
     <!-- 3. Modal Assistente de Carregamento Local (CORS Bypasser para file://) -->
     <div class="loader-modal" id="loaderModal">

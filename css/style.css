@@ -43,6 +43,7 @@ body {
 #map {
     height: 100%;
     width: 100%;
+    position: relative;
     z-index: 1;
 }
 
@@ -909,44 +910,36 @@ body {
     50% { transform: translateY(-8px); }
 }
 
-/* Botão Toggle Sidebar — ancorado na borda direita da sidebar */
-.mobile-toggle {
+/* Botão Toggle Sidebar — fora da sidebar, centralizado abaixo dos controles de zoom */
+.map-toggle {
     display: flex;
     position: absolute;
-    top: 70px;
-    right: -22px;           /* sai pela borda direita da sidebar */
-    left: auto;
+    top: 140px;
+    left: 17px;
     z-index: 1100;
     width: 44px;
     height: 44px;
-    border-radius: 0 12px 12px 0;   /* arredondado só no lado de fora */
+    border-radius: 12px;
     background: var(--bg-glass);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border: 1px solid var(--border-glass);
-    border-left: none;               /* funde visualmente com a sidebar */
     color: #fff;
     font-size: 22px;
     cursor: pointer;
-    box-shadow: 4px 0 12px rgba(0,0,0,0.25);
+    box-shadow: var(--shadow-premium);
     align-items: center;
     justify-content: center;
     transition: all 0.3s ease;
 }
-.mobile-toggle:active {
+.map-toggle:active {
     transform: scale(0.92);
 }
 
-/* Sidebar colapsada no desktop/tablet — botão ainda fica visível */
+/* Sidebar colapsada no desktop/tablet */
 @media(min-width: 769px) {
     .sidebar.collapsed {
         left: -320px !important;
-    }
-    /* Quando colapsada, o botão (right:-22px) vai junto e fica em left: -320+300-(-22) = 2px,
-       visualmente preso à margem esquerda da tela */
-    .sidebar.collapsed .mobile-toggle {
-        right: -44px;      /* empurra mais para fora, garantindo visibilidade */
-        border-radius: 0 12px 12px 0;
     }
     .leaflet-control-zoom {
         margin-top: 64px !important;
@@ -970,11 +963,11 @@ body {
     body {
         flex-direction: column;
     }
-    /* No mobile a sidebar desliza da esquerda — botão fica na borda direita da sidebar */
-    .mobile-toggle {
-        top: 14px;              /* topo da sidebar (que começa em top:0 no mobile) */
-        right: -44px;           /* fora da borda direita, sempre visível */
-        border-radius: 0 12px 12px 0;
+    /* No mobile o botão fica na área do mapa, abaixo do zoom */
+    .map-toggle {
+        top: 130px;
+        left: 12px;
+        border-radius: 12px;
     }
     .sidebar {
         position: fixed;
