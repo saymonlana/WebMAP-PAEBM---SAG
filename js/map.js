@@ -1193,8 +1193,12 @@ window.toggleSidebar = function() {
         sidebar.classList.toggle('collapsed');
         if (sidebar.classList.contains('collapsed')) {
             toggle.querySelector('i').className = 'ti ti-menu-2';
+            toggle.style.left = '17px';
+            toggle.style.top = '140px';
         } else {
             toggle.querySelector('i').className = 'ti ti-x';
+            toggle.style.left = '288px';
+            toggle.style.top = '70px';
         }
     }
 };
@@ -1214,6 +1218,8 @@ function closeSidebar() {
         if (!sidebar.classList.contains('collapsed')) {
             sidebar.classList.add('collapsed');
             toggle.querySelector('i').className = 'ti ti-menu-2';
+            toggle.style.left = '17px';
+            toggle.style.top = '140px';
         }
     }
 }
@@ -1536,8 +1542,13 @@ window.onload = function() {
         document.getElementById('sidebar').classList.add('open');
         document.getElementById('sidebarOverlay').classList.add('open');
     }
-    // Ícone sempre começa como X (sidebar aberta)
-    document.getElementById('mobileToggle').querySelector('i').className = 'ti ti-x';
+    // Ícone sempre começa como X e posição na borda da sidebar (sidebar aberta)
+    var toggle = document.getElementById('mobileToggle');
+    toggle.querySelector('i').className = 'ti ti-x';
+    if (window.innerWidth > 768) {
+        toggle.style.left = '288px';
+        toggle.style.top = '70px';
+    }
 
     initMap();
     tryAutoLoadData();
