@@ -961,10 +961,10 @@ body {
     body {
         flex-direction: column;
     }
-    /* No mobile o botão fica na área do mapa, abaixo do zoom */
+    /* No mobile o botão fica centralizado acima do zoom */
     .map-toggle {
-        top: 130px;
-        left: 12px;
+        top: 12px;
+        left: 11px;
     }
     .sidebar {
         position: fixed;
