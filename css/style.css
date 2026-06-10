@@ -1063,7 +1063,7 @@ body {
         margin-bottom: 1px !important;
     }
     .map-legend {
-        bottom: 56px !important;
+        bottom: 10px !important;
         right: 8px !important;
         width: auto !important;
         max-width: none !important;
