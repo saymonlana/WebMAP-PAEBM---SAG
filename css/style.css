@@ -1172,6 +1172,7 @@ body {
     }
 }
 
+/* Tablet compartilhado (ambas orientações) */
 @media(min-width: 768px) and (max-width: 1024px) {
     .north-arrow {
         padding: 0 !important;
@@ -1187,14 +1188,27 @@ body {
         bottom: 14px !important;
         z-index: 1101 !important;
     }
-    .leaflet-bottom.leaflet-right {
-        position: fixed !important;
-        bottom: 260px !important;
-        z-index: 1101 !important;
-    }
     .leaflet-control-layers {
         font-size: 12px !important;
         padding: 8px 10px !important;
+    }
+}
+
+/* Tablet em pé (portrait) — legenda e escala sobem bem mais */
+@media(min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    .leaflet-bottom.leaflet-right {
+        position: fixed !important;
+        bottom: 340px !important;
+        z-index: 1101 !important;
+    }
+}
+
+/* Tablet deitado (landscape) — legenda e escala no canto inferior direito */
+@media(min-width: 768px) and (orientation: landscape) and (max-width: 1024px) {
+    .leaflet-bottom.leaflet-right {
+        position: fixed !important;
+        bottom: 20px !important;
+        z-index: 1101 !important;
     }
 }
 
