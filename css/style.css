@@ -1187,6 +1187,16 @@ body {
         bottom: 14px !important;
         z-index: 1101 !important;
     }
+    .map-legend {
+        bottom: 70px !important;
+        right: 12px !important;
+        padding: 8px 12px !important;
+        font-size: 12px !important;
+    }
+    .leaflet-control-layers {
+        font-size: 12px !important;
+        padding: 8px 10px !important;
+    }
 }
 
 @media(max-width: 400px) {
