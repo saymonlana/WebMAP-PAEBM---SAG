@@ -1189,7 +1189,7 @@ body {
     }
     .leaflet-bottom.leaflet-right {
         position: fixed !important;
-        bottom: 20px !important;
+        bottom: 90px !important;
         z-index: 1101 !important;
     }
     .leaflet-control-layers {
