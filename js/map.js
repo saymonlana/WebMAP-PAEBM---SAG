@@ -114,7 +114,8 @@ function initMap() {
 // 4. LEGENDA
 // =========================================================================
 function addMapLegend() {
-    var legend = L.control({ position: 'bottomright' });
+    var legendPos = (window.innerWidth <= 1024) ? 'topright' : 'bottomright';
+    var legend = L.control({ position: legendPos });
     legend.onAdd = function() {
         var div = L.DomUtil.create('div', 'map-legend');
         div.innerHTML =

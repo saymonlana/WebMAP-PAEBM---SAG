@@ -1187,13 +1187,6 @@ body {
         bottom: 14px !important;
         z-index: 1101 !important;
     }
-    .map-legend {
-        position: fixed !important;
-        top: 120px !important;
-        right: 12px !important;
-        bottom: auto !important;
-        z-index: 1101 !important;
-    }
     .leaflet-control-layers {
         font-size: 12px !important;
         padding: 8px 10px !important;
