@@ -1172,6 +1172,23 @@ body {
     }
 }
 
+@media(min-width: 769px) and (max-width: 1024px) {
+    .north-arrow {
+        padding: 0 !important;
+        width: 38px;
+        height: 38px;
+    }
+    .north-arrow svg {
+        width: 20px !important;
+        height: 22px !important;
+    }
+    .leaflet-bottom.leaflet-left {
+        position: fixed !important;
+        bottom: 14px !important;
+        z-index: 1101 !important;
+    }
+}
+
 @media(max-width: 400px) {
     .sidebar {
         width: 85vw;
