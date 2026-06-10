@@ -1194,19 +1194,25 @@ body {
     }
 }
 
-/* Tablet em pé (portrait) — legenda e escala sobem bem mais */
-@media(min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+/* Tablet em pé (portrait — 768 a 900px) — legenda e escala sobem */
+@media(min-width: 768px) and (max-width: 900px) {
     .leaflet-bottom.leaflet-right {
-        position: fixed !important;
-        bottom: 340px !important;
+        bottom: 320px !important;
         z-index: 1101 !important;
+    }
+    .leaflet-control-scale {
+        bottom: auto !important;
+        margin-bottom: 10px !important;
     }
 }
 
-/* Tablet deitado (landscape) — legenda e escala no canto inferior direito */
-@media(min-width: 768px) and (orientation: landscape) and (max-width: 1024px) {
+/* Tablet deitado (landscape — 901 a 1024px) — legenda e escala no canto */
+@media(min-width: 901px) and (max-width: 1024px) {
     .leaflet-bottom.leaflet-right {
-        position: fixed !important;
+        bottom: 20px !important;
+        z-index: 1101 !important;
+    }
+}
         bottom: 20px !important;
         z-index: 1101 !important;
     }
