@@ -340,6 +340,8 @@ function createQuestionnairePopup(attrs, residentRecords, animalRecords) {
         var a = ar.attributes || {};
         if (hasValue(a.NOME_DO_ANIMAL)) {
             mergedAnimals.push(ar);
+        } else if (hasValue(a.REBANHO_TIPO_DE_CRIACAO) || hasValue(a.CLASIFICACAO_DECLARADA) || hasValue(a.QUANTIDADE)) {
+            mergedAnimals.push(ar);
         } else if (hasValue(a.NOME_COMUM) || hasValue(a.QUANTIDADE_)) {
             extraSilvestre.push(a);
         }
@@ -351,7 +353,7 @@ function createQuestionnairePopup(attrs, residentRecords, animalRecords) {
             var a = ar.attributes || {};
             animaisHTML += '<tr style="border-bottom:1px dashed #e2e8f0"><td class="label-cell" style="vertical-align:top"><b>Animal ' + (idx + 1) + '</b></td><td class="value-cell" style="vertical-align:top">' +
                 '<div style="line-height:1.6">' +
-                '<b>Nome:</b> ' + v(a.NOME_DO_ANIMAL) + '<br>' +
+                '<b>Nome:</b> ' + v(a.NOME_DO_ANIMAL || a.CLASIFICACAO_DECLARADA) + '<br>' +
                 '<b>Espécie:</b> ' + v(a.CLASIFICACAO_DECLARADA) + '<br>' +
                 '<b>Família:</b> ' + v(a.FAMILIA) + ' | <b>Ordem:</b> ' + v(a.ORDEM) + '<br>' +
                 '<b>Científico:</b> ' + v(a.NOME_CIENTIFICO) + '<br>' +
