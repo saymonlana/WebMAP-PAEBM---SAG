@@ -330,9 +330,16 @@ function createQuestionnairePopup(attrs, residentRecords, animalRecords) {
     var extraSilvestre = [];
     function hasValue(v) { return v && String(v).trim() !== '' && String(v).trim() !== 'null' && v !== 'N/A'; }
     // Respondent's own animal data
-    var respAnimal = hasValue(attrs.NOME_DO_ANIMAL);
+    var respAnimalName = hasValue(attrs.NOME_DO_ANIMAL);
+    var respAnimalInfo = hasValue(attrs.REBANHO_TIPO_DE_CRIACAO) || hasValue(attrs.CLASIFICACAO_DECLARADA) || hasValue(attrs.QUANTIDADE);
+    var respAnimal = respAnimalName || (hasValue(attrs.ANIMAL_DOMESTICO) && String(attrs.ANIMAL_DOMESTICO).trim().toUpperCase() === 'SIM' && respAnimalInfo);
     if (respAnimal) {
-        var alreadyInList = animalRecords && animalRecords.some(function(ar) { return ar.attributes && ar.attributes.NOME_DO_ANIMAL === attrs.NOME_DO_ANIMAL; });
+        var alreadyInList = animalRecords && animalRecords.some(function(ar) {
+            var a = ar.attributes || {};
+            if (respAnimalName && hasValue(a.NOME_DO_ANIMAL) && a.NOME_DO_ANIMAL === attrs.NOME_DO_ANIMAL) return true;
+            if (!respAnimalName && hasValue(a.REBANHO_TIPO_DE_CRIACAO) && a.REBANHO_TIPO_DE_CRIACAO === attrs.REBANHO_TIPO_DE_CRIACAO && a.CLASIFICACAO_DECLARADA === attrs.CLASIFICACAO_DECLARADA) return true;
+            return false;
+        });
         if (!alreadyInList) mergedAnimals.push({ attributes: attrs });
     }
     // Process animal records - separate regular animals from silvestre
@@ -618,13 +625,15 @@ function renderQuestionnaires() {
         var nomeVal = attrs.NOME_DO_ENTREVISTADO || attrs.NOME;
         var hasNome = nomeVal && String(nomeVal).trim() !== '' && String(nomeVal).trim() !== 'null';
 
+        var hasAnimalFields = attrs.REBANHO_TIPO_DE_CRIACAO || attrs.CLASIFICACAO_DECLARADA || attrs.QUANTIDADE || attrs.ANIMAL_DOMESTICO || attrs.FINALIDADE_DA_CRIACAO || attrs.NOME_DO_TUTOR;
+
         if (hasStatus) {
             groups[code].respondent = feature;
         } else if (hasAnimal) {
             groups[code].animals.push(feature);
         } else if (hasNome || attrs.IDADE || attrs.GENERO) {
             groups[code].residents.push(feature);
-        } else {
+        } else if (hasAnimalFields) {
             groups[code].animals.push(feature);
         }
     });
