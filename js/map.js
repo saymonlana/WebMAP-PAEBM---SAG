@@ -635,6 +635,8 @@ function renderQuestionnaires() {
             groups[code].residents.push(feature);
         } else if (hasAnimalFields) {
             groups[code].animals.push(feature);
+        } else if ((attrs.NOME_COMUM && String(attrs.NOME_COMUM).trim() !== '' ) || (attrs.QUANTIDADE_ && String(attrs.QUANTIDADE_).trim() !== '' )) {
+            groups[code].animals.push(feature);
         }
     });
 
